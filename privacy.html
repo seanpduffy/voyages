@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voyages — Privacy Policy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F0E8;
+    --bg-light: #FAF7F2;
+    --border: #DDD5C5;
+    --text-primary: #3D3529;
+    --text-secondary: #8A7E6B;
+    --text-muted: #B5A997;
+    --accent: #C4A87C;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 80px 32px 120px;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 48px;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--text-primary); }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 42px;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .last-updated {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 48px;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--text-primary);
+    margin-top: 40px;
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  strong {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  .contact-block {
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+
+  .contact-block p {
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <a href="/" class="back-link">&larr; Back to Voyages</a>
+
+  <h1>Privacy Policy</h1>
+  <p class="last-updated">Last updated: March 7, 2026</p>
+
+  <p>Voyages is a personal vacation timeline tool that displays your Google Calendar events as a visual year-at-a-glance view. Your privacy is important to us. This policy explains what data Voyages accesses, how it's used, and how it's protected.</p>
+
+  <h2>What Data We Access</h2>
+
+  <p>When you sign in with Google, Voyages requests <strong>read-only access</strong> to your Google Calendar data. Specifically, Voyages accesses:</p>
+
+  <p><strong>Calendar list</strong> — the names and IDs of your Google Calendars, so you can choose which calendar to display.</p>
+
+  <p><strong>Calendar events</strong> — the event titles, start dates, and end dates from your selected calendar, so they can be rendered on the timeline.</p>
+
+  <p><strong>Basic profile information</strong> — your name and profile photo, displayed in the app so you know which account you're signed in with.</p>
+
+  <h2>How Your Data Is Used</h2>
+
+  <p>Your calendar data is used <strong>solely to display your trips on the visual timeline</strong>. That's it. Voyages does not analyze, share, sell, or monetize your data in any way.</p>
+
+  <h2>Where Your Data Is Stored</h2>
+
+  <p>Voyages is a <strong>client-side application</strong>. This means all data processing happens entirely in your web browser. Your calendar data is fetched directly from Google's servers to your browser and is never sent to or stored on any third-party server.</p>
+
+  <p>The only data stored locally in your browser (via localStorage) is:</p>
+
+  <p><strong>Your selected calendar ID</strong> — so the app remembers which calendar to load when you return.</p>
+
+  <p><strong>Color preferences</strong> — if you customize the color of a trip, that preference is saved locally.</p>
+
+  <p>You can clear this data at any time by clearing your browser's localStorage for the voyagescal.com domain, or by using your browser's "Clear site data" function.</p>
+
+  <h2>Data Sharing</h2>
+
+  <p>Voyages does <strong>not share your data with any third parties</strong>. There are no analytics services, advertising networks, tracking pixels, or external data processors. No data leaves your browser except for the direct requests to Google's API to fetch your calendar events.</p>
+
+  <h2>Data Retention</h2>
+
+  <p>Voyages does not retain your data. Calendar events are fetched fresh from Google each time you load the app or click Refresh. When you close the browser tab, the calendar data is gone. The only persistent data is the calendar ID and color preferences stored in your browser's localStorage, which you can delete at any time.</p>
+
+  <h2>Security</h2>
+
+  <p>Voyages uses <strong>Google's OAuth 2.0</strong> authentication. Your Google password is never seen or handled by Voyages — authentication happens entirely through Google's secure sign-in flow. The access token provided by Google is held only in your browser's memory and is not stored persistently.</p>
+
+  <p>The app is served over <strong>HTTPS</strong>, ensuring all data in transit is encrypted.</p>
+
+  <h2>Your Rights</h2>
+
+  <p>You can <strong>revoke Voyages' access</strong> to your Google account at any time by visiting your <a href="https://myaccount.google.com/permissions" target="_blank">Google Account Permissions</a> page and removing Voyages from the list of connected apps.</p>
+
+  <p>You can <strong>delete all locally stored data</strong> by clearing your browser data for voyagescal.com.</p>
+
+  <h2>Children's Privacy</h2>
+
+  <p>Voyages is not directed at children under 13. We do not knowingly collect personal information from children.</p>
+
+  <h2>Changes to This Policy</h2>
+
+  <p>If this privacy policy changes, the updated version will be posted at this URL with a revised "Last updated" date. Continued use of Voyages after changes constitutes acceptance of the updated policy.</p>
+
+  <hr class="divider">
+
+  <h2>Contact</h2>
+
+  <p>If you have questions about this privacy policy or how Voyages handles your data:</p>
+
+  <div class="contact-block">
+    <p><strong>Voyages</strong></p>
+    <p><a href="mailto:seanduffy@gmail.com">seanduffy@gmail.com</a></p>
+    <p><a href="https://voyagescal.com">voyagescal.com</a></p>
+  </div>
+</div>
+
+</body>
+</html>
