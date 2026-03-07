@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
+  <!-- Voyages wordmark with timeline motif -->
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300');
+    </style>
+  </defs>
+  
+  <!-- Timeline bar -->
+  <rect x="0" y="78" width="400" height="1.5" rx="0.75" fill="#DDD5C5"/>
+  
+  <!-- Trip blocks on timeline -->
+  <rect x="45" y="70" width="18" height="17" rx="3" fill="#C4A87C" opacity="0.8"/>
+  <rect x="110" y="70" width="40" height="17" rx="3" fill="#A3B5A6" opacity="0.8"/>
+  <rect x="195" y="70" width="14" height="17" rx="3" fill="#B8967A" opacity="0.8"/>
+  <rect x="255" y="70" width="28" height="17" rx="3" fill="#8FA3B5" opacity="0.8"/>
+  <rect x="330" y="70" width="22" height="17" rx="3" fill="#C49B8A" opacity="0.8"/>
+  
+  <!-- Wordmark -->
+  <text x="200" y="52" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-weight="300" font-size="52" fill="#3D3529" letter-spacing="4">Voyages</text>
+  
+  <!-- Dot accents on timeline -->
+  <circle cx="54" cy="96" r="2" fill="#C4A87C"/>
+  <circle cx="130" cy="96" r="2" fill="#A3B5A6"/>
+  <circle cx="202" cy="96" r="2" fill="#B8967A"/>
+  <circle cx="269" cy="96" r="2" fill="#8FA3B5"/>
+  <circle cx="341" cy="96" r="2" fill="#C49B8A"/>
+  
+  <!-- Connector lines from dots -->
+  <line x1="54" y1="88" x2="54" y2="94" stroke="#DDD5C5" stroke-width="1"/>
+  <line x1="130" y1="88" x2="130" y2="94" stroke="#DDD5C5" stroke-width="1"/>
+  <line x1="202" y1="88" x2="202" y2="94" stroke="#DDD5C5" stroke-width="1"/>
+  <line x1="269" y1="88" x2="269" y2="94" stroke="#DDD5C5" stroke-width="1"/>
+  <line x1="341" y1="88" x2="341" y2="94" stroke="#DDD5C5" stroke-width="1"/>
+</svg>
