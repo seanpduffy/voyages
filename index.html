@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voyages</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F0E8;
+    --bg-light: #FAF7F2;
+    --bg-warm: #EDE6D8;
+    --border: #DDD5C5;
+    --text-primary: #3D3529;
+    --text-secondary: #8A7E6B;
+    --text-muted: #B5A997;
+    --accent: #C4A87C;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    padding: 40px 48px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .app-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 36px;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+  }
+
+  .app-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .year-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .year-nav button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .year-nav button:hover {
+    background: var(--bg-warm);
+    color: var(--text-primary);
+  }
+
+  .year-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-primary);
+    min-width: 60px;
+    text-align: center;
+  }
+
+  /* ── User pill ── */
+  .user-pill {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 6px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .user-pill:hover { background: var(--bg-warm); }
+
+  .user-pill.active { display: flex; }
+
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg-warm);
+    object-fit: cover;
+  }
+
+  .user-name {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  /* ── Sign-in screen ── */
+  .signin-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 24px;
+    text-align: center;
+    padding: 48px;
+  }
+
+  .signin-screen.hidden { display: none; }
+
+  .signin-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 48px;
+    letter-spacing: -1px;
+    color: var(--text-primary);
+  }
+
+  .signin-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+
+  .signin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--text-primary);
+    color: var(--bg-light);
+    border: none;
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    margin-top: 8px;
+  }
+
+  .signin-btn:hover {
+    background: #2A2419;
+    transform: translateY(-1px);
+  }
+
+  .signin-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .signin-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    max-width: 360px;
+    line-height: 1.5;
+  }
+
+  /* ── Main app (hidden until signed in) ── */
+  .app-main { display: none; }
+  .app-main.active { display: block; }
+
+  /* ── Stats ── */
+  .stats-row {
+    padding: 0 48px 32px;
+    display: flex;
+    gap: 40px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--text-primary);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ── Timeline ── */
+  .timeline-container {
+    padding: 60px 48px 48px;
+    overflow-x: auto;
+  }
+
+  .timeline-wrapper {
+    position: relative;
+    min-width: 100%;
+  }
+
+  .trip-labels-top {
+    position: relative;
+    min-height: 80px;
+    margin-bottom: 8px;
+  }
+
+  .trip-label-top {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    cursor: default;
+    transition: opacity 0.2s;
+  }
+
+  .trip-label-top:hover { opacity: 0.7; }
+
+  .trip-label-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+    padding-bottom: 4px;
+    position: relative;
+    z-index: 2;
+    background: var(--bg);
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .trip-label-line {
+    width: 1px;
+    min-height: 28px;
+    background: var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .trip-label-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .months-header {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .month-cell {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+  }
+
+  .month-cell.current { color: var(--text-primary); }
+
+  .timeline-track {
+    position: relative;
+    height: 56px;
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+  }
+
+  .month-column {
+    flex: 1;
+    border-right: 1px solid var(--border);
+  }
+
+  .month-column:last-child { border-right: none; }
+  .month-column.current { background: rgba(196, 168, 124, 0.06); }
+
+  .today-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    z-index: 10;
+    opacity: 0.7;
+  }
+
+  .today-marker::after {
+    content: 'today';
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .trip-block {
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 5;
+    opacity: 0.85;
+  }
+
+  .trip-block:hover {
+    opacity: 1;
+    transform: scaleY(1.08);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .trip-labels-bottom {
+    position: relative;
+    min-height: 80px;
+    margin-top: 8px;
+  }
+
+  .trip-label-bottom {
+    position: absolute;
+    top: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .trip-label-bottom .trip-label-dot { order: -2; }
+  .trip-label-bottom .trip-label-line { order: -1; }
+
+  .trip-date-text {
+    font-size: 11px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    font-weight: 300;
+    padding-top: 4px;
+    position: relative;
+    z-index: 2;
+    background: var(--bg);
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  /* ── Controls bar ── */
+  .controls-bar {
+    padding: 0 48px 48px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .secondary-btn {
+    background: none;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .secondary-btn:hover {
+    background: var(--bg-warm);
+    color: var(--text-primary);
+  }
+
+  /* ── Calendar picker panel ── */
+  .cal-picker-panel {
+    display: none;
+    padding: 0 48px 48px;
+  }
+
+  .cal-picker-panel.active { display: block; }
+
+  .cal-picker-card {
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    max-width: 480px;
+  }
+
+  .cal-picker-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .cal-picker-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  .cal-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A7E6B' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .cal-select:focus { border-color: var(--accent); }
+
+  .cal-status {
+    font-size: 12px;
+    margin-top: 10px;
+    min-height: 18px;
+  }
+
+  .cal-status.success { color: #7A9E7A; }
+  .cal-status.error { color: #C47C7C; }
+  .cal-status.loading { color: var(--text-muted); }
+
+  /* ── Color picker popover ── */
+  .color-popover {
+    display: none;
+    position: fixed;
+    z-index: 200;
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    width: 220px;
+  }
+
+  .color-popover.active { display: block; }
+
+  .color-popover-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .color-popover-dates {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    font-weight: 300;
+  }
+
+  .color-popover-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 24px);
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .color-popover-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .color-popover-swatch:hover {
+    transform: scale(1.2);
+    border-color: var(--text-secondary);
+  }
+
+  .color-popover-swatch.selected {
+    border-color: var(--text-primary);
+    transform: scale(1.15);
+  }
+
+  /* ── User menu dropdown ── */
+  .user-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    z-index: 100;
+    min-width: 160px;
+  }
+
+  .user-menu.active { display: block; }
+
+  .user-menu-item {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+
+  .user-menu-item:hover {
+    background: var(--bg-warm);
+    color: var(--text-primary);
+  }
+
+  .user-pill-wrapper {
+    position: relative;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .app-header { padding: 24px 24px 0; }
+    .timeline-container { padding: 40px 24px 24px; }
+    .controls-bar { padding: 0 24px 32px; }
+    .stats-row { padding: 0 24px 24px; gap: 24px; }
+    .cal-picker-panel { padding: 0 24px 32px; }
+    .app-title { font-size: 28px; }
+    .signin-title { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════ Sign-in Screen ══════ -->
+<div class="signin-screen" id="signinScreen">
+  <h1 class="signin-title">Voyages</h1>
+  <p class="signin-subtitle">A beautiful linear view of your year's travels. Sign in with Google to pull trips from your calendar.</p>
+  <button class="signin-btn" onclick="handleSignIn()">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+    Sign in with Google
+  </button>
+  <p class="signin-note">We only request read access to your calendar list and events. Nothing is stored on any server — everything stays in your browser.</p>
+</div>
+
+<!-- ══════ Main App (hidden until signed in) ══════ -->
+<div class="app-main" id="appMain">
+  <div class="app-header">
+    <div>
+      <h1 class="app-title">Voyages</h1>
+      <p class="app-subtitle" id="subtitle">Your year at a glance</p>
+    </div>
+    <div class="header-right">
+      <div class="year-nav">
+        <button onclick="changeYear(-1)">&#8249;</button>
+        <span class="year-label" id="yearLabel">2026</span>
+        <button onclick="changeYear(1)">&#8250;</button>
+      </div>
+      <div class="user-pill-wrapper">
+        <div class="user-pill" id="userPill" onclick="toggleUserMenu()">
+          <img class="user-avatar" id="userAvatar" src="" alt="">
+          <span class="user-name" id="userName"></span>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <div class="user-menu-item" onclick="toggleCalPicker()">Change calendar</div>
+          <div class="user-menu-item" onclick="handleSignOut()">Sign out</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-value" id="statTrips">0</span>
+      <span class="stat-label">Trips</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" id="statDays">0</span>
+      <span class="stat-label">Days Away</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" id="statNext">&mdash;</span>
+      <span class="stat-label">Next Trip</span>
+    </div>
+  </div>
+
+  <div class="timeline-container">
+    <div class="timeline-wrapper" id="timelineWrapper">
+      <div class="trip-labels-top" id="labelsTop"></div>
+      <div class="months-header" id="monthsHeader"></div>
+      <div class="timeline-track" id="timelineTrack"></div>
+      <div class="trip-labels-bottom" id="labelsBottom"></div>
+    </div>
+  </div>
+
+  <div class="controls-bar">
+    <button class="secondary-btn" onclick="refreshCalendar()">Refresh</button>
+    <button class="secondary-btn" onclick="toggleCalPicker()">Change Calendar</button>
+  </div>
+
+  <!-- Calendar picker panel -->
+  <div class="cal-picker-panel" id="calPickerPanel">
+    <div class="cal-picker-card">
+      <h3>Choose a Calendar</h3>
+      <p>Select which calendar holds your trips. If you share a calendar with your travel partner, you'll both see the same events.</p>
+      <select class="cal-select" id="calSelect" onchange="onCalendarSelected()">
+        <option value="">Loading calendars...</option>
+      </select>
+      <div class="cal-status" id="calStatus"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Color picker popover -->
+<div class="color-popover" id="colorPopover">
+  <div class="color-popover-title" id="popoverTitle"></div>
+  <div class="color-popover-dates" id="popoverDates"></div>
+  <div class="color-popover-grid" id="popoverGrid"></div>
+</div>
+
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<script>
+  // ═══════════════════════════════════════
+  //  CONFIGURATION — Replace with your own
+  // ═══════════════════════════════════════
+  // Create at: https://console.cloud.google.com/apis/credentials
+  // Type: OAuth 2.0 Client ID → Web application
+  // Authorized JavaScript origins: your GitHub Pages URL (e.g. https://yourusername.github.io)
+  const CLIENT_ID = 'YOUR_CLIENT_ID_HERE.apps.googleusercontent.com';
+  const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
+
+  // ═══════════════════════════════════════
+  //  STATE
+  // ═══════════════════════════════════════
+  const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const PALETTE = [
+    '#C4A87C','#A3B5A6','#B8967A','#8FA3B5','#C49B8A','#A39BB5',
+    '#B5A68F','#8AB5A3','#C4B87C','#B58A8A','#7CA3C4','#C4987C',
+  ];
+
+  let currentYear = new Date().getFullYear();
+  let trips = [];
+  let accessToken = null;
+  let selectedCalId = '';
+  let tokenClient = null;
+  let userInfo = null;
+
+  // ═══════════════════════════════════════
+  //  STORAGE
+  // ═══════════════════════════════════════
+  function save(k, v) { try { localStorage.setItem(k, v); } catch(e) {} }
+  function load(k) { try { return localStorage.getItem(k) || ''; } catch(e) { return ''; } }
+
+  function getColorOverrides() {
+    try { return JSON.parse(localStorage.getItem('voyage_color_overrides') || '{}'); } catch(e) { return {}; }
+  }
+  function setColorOverride(key, color) {
+    const o = getColorOverrides();
+    o[key] = color;
+    try { localStorage.setItem('voyage_color_overrides', JSON.stringify(o)); } catch(e) {}
+  }
+  function tripKey(t) { return t.name + '|' + t.start; }
+
+  // ═══════════════════════════════════════
+  //  GOOGLE AUTH
+  // ═══════════════════════════════════════
+  function initTokenClient() {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      callback: onTokenResponse,
+    });
+  }
+
+  function handleSignIn() {
+    if (!tokenClient) initTokenClient();
+    tokenClient.requestAccessToken();
+  }
+
+  function onTokenResponse(resp) {
+    if (resp.error) {
+      console.error('Auth error:', resp);
+      return;
+    }
+    accessToken = resp.access_token;
+
+    // Fetch user info for avatar/name
+    fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+    .then(r => r.json())
+    .then(info => {
+      userInfo = info;
+      showApp();
+      loadCalendarList();
+    });
+  }
+
+  function handleSignOut() {
+    if (accessToken) {
+      google.accounts.oauth2.revoke(accessToken);
+    }
+    accessToken = null;
+    userInfo = null;
+    trips = [];
+    document.getElementById('appMain').classList.remove('active');
+    document.getElementById('signinScreen').classList.remove('hidden');
+    closeUserMenu();
+  }
+
+  // ═══════════════════════════════════════
+  //  APP SHELL
+  // ═══════════════════════════════════════
+  function showApp() {
+    document.getElementById('signinScreen').classList.add('hidden');
+    document.getElementById('appMain').classList.add('active');
+
+    // User pill
+    const pill = document.getElementById('userPill');
+    pill.classList.add('active');
+    document.getElementById('userName').textContent = userInfo.given_name || userInfo.name || 'You';
+    if (userInfo.picture) {
+      document.getElementById('userAvatar').src = userInfo.picture;
+    }
+
+    render();
+  }
+
+  function toggleUserMenu() {
+    document.getElementById('userMenu').classList.toggle('active');
+  }
+
+  function closeUserMenu() {
+    document.getElementById('userMenu').classList.remove('active');
+  }
+
+  // ═══════════════════════════════════════
+  //  CALENDAR LIST & EVENTS
+  // ═══════════════════════════════════════
+  async function loadCalendarList() {
+    try {
+      const resp = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      const data = await resp.json();
+      const calendars = (data.items || []).filter(c => c.accessRole === 'owner' || c.accessRole === 'writer' || c.accessRole === 'reader');
+
+      const select = document.getElementById('calSelect');
+      select.innerHTML = '<option value="">Choose a calendar...</option>';
+      calendars.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.summary + (c.primary ? ' (primary)' : '');
+        select.appendChild(opt);
+      });
+
+      // Auto-select saved calendar if available
+      const savedCal = load('voyage_selected_cal');
+      if (savedCal && calendars.some(c => c.id === savedCal)) {
+        select.value = savedCal;
+        selectedCalId = savedCal;
+        await refreshCalendar();
+      } else {
+        // Show picker on first use
+        document.getElementById('calPickerPanel').classList.add('active');
+      }
+    } catch (err) {
+      console.error('Calendar list error:', err);
+    }
+  }
+
+  async function onCalendarSelected() {
+    const id = document.getElementById('calSelect').value;
+    if (!id) return;
+    selectedCalId = id;
+    save('voyage_selected_cal', id);
+
+    const status = document.getElementById('calStatus');
+    status.textContent = 'Loading events...';
+    status.className = 'cal-status loading';
+
+    await refreshCalendar();
+
+    const count = trips.length;
+    status.textContent = `Found ${count} event${count !== 1 ? 's' : ''}`;
+    status.className = 'cal-status success';
+
+    // Auto-close picker after a moment
+    setTimeout(() => {
+      document.getElementById('calPickerPanel').classList.remove('active');
+      status.textContent = '';
+    }, 1500);
+  }
+
+  async function fetchCalendarEvents() {
+    if (!selectedCalId || !accessToken) return [];
+
+    const timeMin = new Date(currentYear - 1, 0, 1).toISOString();
+    const timeMax = new Date(currentYear + 2, 0, 1).toISOString();
+
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(selectedCalId)}/events`
+      + `?timeMin=${timeMin}`
+      + `&timeMax=${timeMax}`
+      + `&singleEvents=true`
+      + `&orderBy=startTime`
+      + `&maxResults=200`;
+
+    try {
+      const resp = await fetch(url, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err.error?.message || `HTTP ${resp.status}`);
+      }
+      const data = await resp.json();
+      return (data.items || [])
+        .filter(e => e.start && (e.start.date || e.start.dateTime))
+        .map(e => {
+          const startRaw = e.start.date || e.start.dateTime.split('T')[0];
+          const endRaw = e.end.date || e.end.dateTime.split('T')[0];
+          let endDate = endRaw;
+          if (e.end.date) {
+            const d = new Date(endRaw + 'T00:00:00');
+            d.setDate(d.getDate() - 1);
+            endDate = d.toISOString().split('T')[0];
+          }
+          return {
+            name: e.summary || 'Untitled Trip',
+            start: startRaw,
+            end: endDate,
+          };
+        })
+        .filter(t => t.start <= t.end);
+    } catch (err) {
+      console.error('Fetch events error:', err);
+      return [];
+    }
+  }
+
+  function assignColors(list) {
+    const sorted = [...list].sort((a, b) => a.start.localeCompare(b.start));
+    const overrides = getColorOverrides();
+    return sorted.map((t, i) => ({
+      ...t,
+      color: overrides[tripKey(t)] || PALETTE[i % PALETTE.length]
+    }));
+  }
+
+  async function refreshCalendar() {
+    if (!selectedCalId || !accessToken) return;
+    const events = await fetchCalendarEvents();
+    trips = assignColors(events);
+    render();
+  }
+
+  // ═══════════════════════════════════════
+  //  DATE HELPERS
+  // ═══════════════════════════════════════
+  function getDayOfYear(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    const start = new Date(d.getFullYear(), 0, 1);
+    return Math.floor((d - start) / 86400000) + 1;
+  }
+
+  function getDaysInYear(year) {
+    return ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) ? 366 : 365;
+  }
+
+  function formatDateShort(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    return `${MONTH_NAMES[d.getMonth()]} ${d.getDate()}`;
+  }
+
+  // ═══════════════════════════════════════
+  //  RENDER
+  // ═══════════════════════════════════════
+  function render() {
+    const daysInYear = getDaysInYear(currentYear);
+    const now = new Date();
+    const yearTrips = trips.filter(t => {
+      const s = new Date(t.start + 'T00:00:00');
+      const e = new Date(t.end + 'T00:00:00');
+      return s.getFullYear() === currentYear || e.getFullYear() === currentYear;
+    }).sort((a, b) => a.start.localeCompare(b.start));
+
+    document.getElementById('yearLabel').textContent = currentYear;
+
+    // Stats
+    document.getElementById('statTrips').textContent = yearTrips.length;
+    const totalDays = yearTrips.reduce((sum, t) => {
+      const s = new Date(t.start + 'T00:00:00');
+      const e = new Date(t.end + 'T00:00:00');
+      return sum + Math.round((e - s) / 86400000) + 1;
+    }, 0);
+    document.getElementById('statDays').textContent = totalDays;
+
+    const upcoming = yearTrips.find(t => new Date(t.start + 'T00:00:00') > now);
+    if (upcoming) {
+      const daysUntil = Math.ceil((new Date(upcoming.start + 'T00:00:00') - now) / 86400000);
+      document.getElementById('statNext').textContent = daysUntil <= 0 ? 'Now' : `${daysUntil}d`;
+    } else {
+      document.getElementById('statNext').textContent = '\u2014';
+    }
+
+    // Months header
+    const monthsHeader = document.getElementById('monthsHeader');
+    monthsHeader.innerHTML = '';
+    for (let m = 0; m < 12; m++) {
+      const cell = document.createElement('div');
+      cell.className = 'month-cell' + (now.getFullYear() === currentYear && now.getMonth() === m ? ' current' : '');
+      cell.textContent = MONTH_NAMES[m];
+      monthsHeader.appendChild(cell);
+    }
+
+    // Track
+    const track = document.getElementById('timelineTrack');
+    track.innerHTML = '';
+    for (let m = 0; m < 12; m++) {
+      const col = document.createElement('div');
+      col.className = 'month-column' + (now.getFullYear() === currentYear && now.getMonth() === m ? ' current' : '');
+      track.appendChild(col);
+    }
+
+    // Today marker
+    if (now.getFullYear() === currentYear) {
+      const todayDay = getDayOfYear(now.toISOString().split('T')[0]);
+      const todayPct = ((todayDay - 0.5) / daysInYear) * 100;
+      const marker = document.createElement('div');
+      marker.className = 'today-marker';
+      marker.style.left = todayPct + '%';
+      track.appendChild(marker);
+    }
+
+    // Trip blocks
+    yearTrips.forEach(trip => {
+      const startDay = Math.max(1, getDayOfYear(trip.start));
+      const endDay = Math.min(daysInYear, getDayOfYear(trip.end));
+      const leftPct = ((startDay - 1) / daysInYear) * 100;
+      const widthPct = ((endDay - startDay + 1) / daysInYear) * 100;
+
+      const block = document.createElement('div');
+      block.className = 'trip-block';
+      block.style.left = leftPct + '%';
+      block.style.width = Math.max(widthPct, 0.5) + '%';
+      block.style.background = trip.color;
+      block.title = `${trip.name}\n${formatDateShort(trip.start)} \u2013 ${formatDateShort(trip.end)}`;
+      block.onclick = (e) => { e.stopPropagation(); openColorPopover(trip, e); };
+      track.appendChild(block);
+    });
+
+    // ── Top labels with overlap staggering ──
+    const labelsTop = document.getElementById('labelsTop');
+    labelsTop.innerHTML = '';
+    const topEls = [];
+    const topN = yearTrips.length;
+    yearTrips.forEach((trip, i) => {
+      const startDay = Math.max(1, getDayOfYear(trip.start));
+      const endDay = Math.min(daysInYear, getDayOfYear(trip.end));
+      const midPct = ((startDay + endDay) / 2 / daysInYear) * 100;
+      const el = document.createElement('div');
+      el.className = 'trip-label-top';
+      el.style.left = midPct + '%';
+      el.style.transform = 'translateX(-50%)';
+      el.style.zIndex = topN - i;
+      el.innerHTML = `<span class="trip-label-text">${trip.name}</span><div class="trip-label-line"></div><div class="trip-label-dot" style="background:${trip.color}"></div>`;
+      labelsTop.appendChild(el);
+      topEls.push(el);
+    });
+
+    requestAnimationFrame(() => {
+      const BASE = 28, STEP = 30;
+      const rects = topEls.map(el => el.querySelector('.trip-label-text').getBoundingClientRect());
+      const extras = new Array(topEls.length).fill(0);
+      for (let i = 1; i < rects.length; i++) {
+        let mx = 0;
+        for (let j = 0; j < i; j++) {
+          if (rects[i].left - 12 < rects[j].right + 12 && rects[i].right + 12 > rects[j].left - 12)
+            mx = Math.max(mx, extras[j] + STEP);
+        }
+        extras[i] = mx;
+      }
+      let maxH = 0;
+      topEls.forEach((el, i) => {
+        el.querySelector('.trip-label-line').style.minHeight = (BASE + extras[i]) + 'px';
+        if (el.offsetHeight > maxH) maxH = el.offsetHeight;
+      });
+      labelsTop.style.minHeight = (maxH + 8) + 'px';
+    });
+
+    // ── Bottom labels with overlap staggering ──
+    const labelsBottom = document.getElementById('labelsBottom');
+    labelsBottom.innerHTML = '';
+    const botEls = [];
+    const botN = yearTrips.length;
+    yearTrips.forEach((trip, i) => {
+      const startDay = Math.max(1, getDayOfYear(trip.start));
+      const endDay = Math.min(daysInYear, getDayOfYear(trip.end));
+      const midPct = ((startDay + endDay) / 2 / daysInYear) * 100;
+      const el = document.createElement('div');
+      el.className = 'trip-label-bottom';
+      el.style.left = midPct + '%';
+      el.style.transform = 'translateX(-50%)';
+      el.style.zIndex = botN - i;
+      el.innerHTML = `<div class="trip-label-dot" style="background:${trip.color}"></div><div class="trip-label-line"></div><span class="trip-date-text">${formatDateShort(trip.start)} \u2013 ${formatDateShort(trip.end)}</span>`;
+      labelsBottom.appendChild(el);
+      botEls.push(el);
+    });
+
+    requestAnimationFrame(() => {
+      const BASE = 28, STEP = 26;
+      const rects = botEls.map(el => el.querySelector('.trip-date-text').getBoundingClientRect());
+      const extras = new Array(botEls.length).fill(0);
+      for (let i = 1; i < rects.length; i++) {
+        let mx = 0;
+        for (let j = 0; j < i; j++) {
+          if (rects[i].left - 12 < rects[j].right + 12 && rects[i].right + 12 > rects[j].left - 12)
+            mx = Math.max(mx, extras[j] + STEP);
+        }
+        extras[i] = mx;
+      }
+      let maxH = 0;
+      botEls.forEach((el, i) => {
+        el.querySelector('.trip-label-line').style.minHeight = (BASE + extras[i]) + 'px';
+        if (el.offsetHeight > maxH) maxH = el.offsetHeight;
+      });
+      labelsBottom.style.minHeight = (maxH + 8) + 'px';
+    });
+
+    // Empty state
+    if (yearTrips.length === 0 && selectedCalId) {
+      labelsTop.innerHTML = '<div class="empty-state">No events on this calendar for ' + currentYear + '</div>';
+    } else if (yearTrips.length === 0) {
+      labelsTop.innerHTML = '<div class="empty-state">Choose a calendar to see your trips</div>';
+    }
+  }
+
+  // ═══════════════════════════════════════
+  //  NAVIGATION & UI
+  // ═══════════════════════════════════════
+  function changeYear(delta) {
+    currentYear += delta;
+    if (selectedCalId && accessToken) refreshCalendar();
+    else render();
+  }
+
+  function toggleCalPicker() {
+    document.getElementById('calPickerPanel').classList.toggle('active');
+    closeUserMenu();
+  }
+
+  // ═══════════════════════════════════════
+  //  COLOR POPOVER
+  // ═══════════════════════════════════════
+  let popoverTrip = null;
+
+  function openColorPopover(trip, e) {
+    popoverTrip = trip;
+    const popover = document.getElementById('colorPopover');
+    document.getElementById('popoverTitle').textContent = trip.name;
+    document.getElementById('popoverDates').textContent = formatDateShort(trip.start) + ' \u2013 ' + formatDateShort(trip.end);
+
+    const grid = document.getElementById('popoverGrid');
+    grid.innerHTML = '';
+    PALETTE.forEach(c => {
+      const swatch = document.createElement('div');
+      swatch.className = 'color-popover-swatch' + (c === trip.color ? ' selected' : '');
+      swatch.style.background = c;
+      swatch.onclick = (ev) => {
+        ev.stopPropagation();
+        setColorOverride(tripKey(trip), c);
+        const idx = trips.findIndex(t => tripKey(t) === tripKey(trip));
+        if (idx >= 0) trips[idx].color = c;
+        closeColorPopover();
+        render();
+      };
+      grid.appendChild(swatch);
+    });
+
+    const rect = e.target.getBoundingClientRect();
+    let top = rect.bottom + 8;
+    let left = rect.left + rect.width / 2 - 110;
+    if (left < 12) left = 12;
+    if (left + 220 > window.innerWidth - 12) left = window.innerWidth - 232;
+    if (top + 200 > window.innerHeight) top = rect.top - 200;
+
+    popover.style.top = top + 'px';
+    popover.style.left = left + 'px';
+    popover.classList.add('active');
+  }
+
+  function closeColorPopover() {
+    document.getElementById('colorPopover').classList.remove('active');
+    popoverTrip = null;
+  }
+
+  // ═══════════════════════════════════════
+  //  GLOBAL LISTENERS
+  // ═══════════════════════════════════════
+  document.addEventListener('click', (e) => {
+    const popover = document.getElementById('colorPopover');
+    if (popover.classList.contains('active') && !popover.contains(e.target)) closeColorPopover();
+
+    const userMenu = document.getElementById('userMenu');
+    const userPill = document.getElementById('userPill');
+    if (userMenu.classList.contains('active') && !userMenu.contains(e.target) && !userPill.contains(e.target)) closeUserMenu();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeColorPopover();
+      closeUserMenu();
+      document.getElementById('calPickerPanel').classList.remove('active');
+    }
+  });
+
+  // ═══════════════════════════════════════
+  //  INIT
+  // ═══════════════════════════════════════
+  // GIS library loads async — wait for it
+  window.addEventListener('load', () => {
+    if (typeof google !== 'undefined' && google.accounts) {
+      initTokenClient();
+    }
+  });
+</script>
+
+</body>
+</html>
