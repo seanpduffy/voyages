@@ -1209,8 +1209,30 @@
   window.addEventListener('load', () => {
     if (typeof google !== 'undefined' && google.accounts) {
       initTokenClient();
+    } else {
+      // Demo mode — when Google sign-in isn't available (e.g. preview)
+      loadDemoMode();
     }
   });
+
+  function loadDemoMode() {
+    const y = currentYear;
+    trips = assignColors([
+      { name: 'Deer Valley', start: `${y}-03-19`, end: `${y}-03-22` },
+      { name: 'Cabo', start: `${y}-05-29`, end: `${y}-06-03` },
+      { name: 'Utah', start: `${y}-06-28`, end: `${y}-06-30` },
+      { name: 'Aspen', start: `${y}-07-01`, end: `${y}-07-31` },
+      { name: 'Singapore', start: `${y}-08-07`, end: `${y}-08-17` },
+      { name: 'S + A: Hawaii', start: `${y}-11-20`, end: `${y}-11-25` },
+      { name: 'J + W: Disneyland/Legoland', start: `${y}-11-20`, end: `${y}-11-25` },
+      { name: 'Big Sky', start: `${y}-12-28`, end: `${y+1}-01-03` },
+    ]);
+    // Show app directly in demo mode
+    document.getElementById('signinScreen').classList.add('hidden');
+    document.getElementById('appMain').classList.add('active');
+    document.getElementById('subtitle').textContent = 'Demo mode \u2014 sample data';
+    render();
+  }
 </script>
 
 </body>
