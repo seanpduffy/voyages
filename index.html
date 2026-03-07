@@ -621,7 +621,7 @@
       </div>
       <div class="user-pill-wrapper">
         <div class="user-pill" id="userPill" onclick="toggleUserMenu()">
-          <img class="user-avatar" id="userAvatar" src="" alt="">
+          <img class="user-avatar" id="userAvatar" src="" alt="" referrerpolicy="no-referrer" crossorigin="anonymous">
           <span class="user-name" id="userName"></span>
         </div>
         <div class="user-menu" id="userMenu">
@@ -692,7 +692,7 @@
   // Type: OAuth 2.0 Client ID → Web application
   // Authorized JavaScript origins: your GitHub Pages URL (e.g. https://yourusername.github.io)
   const CLIENT_ID = '18035821100-6n5ufft97t634livt21f0mvs69tan8dt.apps.googleusercontent.com';
-  const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
+  const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly openid profile email';
 
   // ═══════════════════════════════════════
   //  STATE
@@ -997,10 +997,22 @@
       track.appendChild(marker);
     }
 
-    // Trip blocks
+    // Trip blocks — clamp cross-year trips to the displayed year
     yearTrips.forEach(trip => {
-      const startDay = Math.max(1, getDayOfYear(trip.start));
-      const endDay = Math.min(daysInYear, getDayOfYear(trip.end));
+      const tripStartDate = new Date(trip.start + 'T00:00:00');
+      const tripEndDate = new Date(trip.end + 'T00:00:00');
+
+      // Clamp to the current displayed year
+      const yearStart = new Date(currentYear, 0, 1);
+      const yearEnd = new Date(currentYear, 11, 31);
+      const clampedStart = tripStartDate < yearStart ? yearStart : tripStartDate;
+      const clampedEnd = tripEndDate > yearEnd ? yearEnd : tripEndDate;
+
+      const clampedStartStr = clampedStart.toISOString().split('T')[0];
+      const clampedEndStr = clampedEnd.toISOString().split('T')[0];
+
+      const startDay = getDayOfYear(clampedStartStr);
+      const endDay = getDayOfYear(clampedEndStr);
       const leftPct = ((startDay - 1) / daysInYear) * 100;
       const widthPct = ((endDay - startDay + 1) / daysInYear) * 100;
 
@@ -1019,9 +1031,16 @@
     labelsTop.innerHTML = '';
     const topEls = [];
     const topN = yearTrips.length;
+    const yearStartDate = new Date(currentYear, 0, 1);
+    const yearEndDate = new Date(currentYear, 11, 31);
+
     yearTrips.forEach((trip, i) => {
-      const startDay = Math.max(1, getDayOfYear(trip.start));
-      const endDay = Math.min(daysInYear, getDayOfYear(trip.end));
+      const ts = new Date(trip.start + 'T00:00:00');
+      const te = new Date(trip.end + 'T00:00:00');
+      const cs = ts < yearStartDate ? yearStartDate : ts;
+      const ce = te > yearEndDate ? yearEndDate : te;
+      const startDay = getDayOfYear(cs.toISOString().split('T')[0]);
+      const endDay = getDayOfYear(ce.toISOString().split('T')[0]);
       const midPct = ((startDay + endDay) / 2 / daysInYear) * 100;
       const el = document.createElement('div');
       el.className = 'trip-label-top';
@@ -1059,8 +1078,12 @@
     const botEls = [];
     const botN = yearTrips.length;
     yearTrips.forEach((trip, i) => {
-      const startDay = Math.max(1, getDayOfYear(trip.start));
-      const endDay = Math.min(daysInYear, getDayOfYear(trip.end));
+      const ts = new Date(trip.start + 'T00:00:00');
+      const te = new Date(trip.end + 'T00:00:00');
+      const cs = ts < yearStartDate ? yearStartDate : ts;
+      const ce = te > yearEndDate ? yearEndDate : te;
+      const startDay = getDayOfYear(cs.toISOString().split('T')[0]);
+      const endDay = getDayOfYear(ce.toISOString().split('T')[0]);
       const midPct = ((startDay + endDay) / 2 / daysInYear) * 100;
       const el = document.createElement('div');
       el.className = 'trip-label-bottom';
