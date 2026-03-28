@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -21,751 +20,746 @@
     --accent: #C4A87C;
   }
 
-- { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-background: var(–bg);
-color: var(–text-primary);
-font-family: ‘DM Sans’, sans-serif;
-min-height: 100vh;
-overflow-x: hidden;
-}
-
-/* ── Header ── */
-.app-header {
-padding: 40px 48px 0;
-display: flex;
-justify-content: space-between;
-align-items: flex-start;
-}
-
-.app-title {
-font-family: ‘Cormorant Garamond’, serif;
-font-weight: 300;
-font-size: 36px;
-letter-spacing: -0.5px;
-color: var(–text-primary);
-}
-
-.app-subtitle {
-font-size: 13px;
-color: var(–text-secondary);
-margin-top: 4px;
-font-weight: 300;
-}
-
-.header-right {
-display: flex;
-align-items: center;
-gap: 20px;
-}
-
-.year-nav {
-display: flex;
-align-items: center;
-gap: 16px;
-}
-
-.year-nav button {
-background: none;
-border: 1px solid var(–border);
-color: var(–text-secondary);
-width: 36px;
-height: 36px;
-border-radius: 50%;
-cursor: pointer;
-font-size: 16px;
-transition: all 0.2s;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-
-.year-nav button:hover {
-background: var(–bg-warm);
-color: var(–text-primary);
-}
-
-.year-label {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 24px;
-font-weight: 400;
-color: var(–text-primary);
-min-width: 60px;
-text-align: center;
-}
-
-/* ── User pill ── */
-.user-pill {
-display: none;
-align-items: center;
-gap: 10px;
-padding: 6px 14px 6px 6px;
-border: 1px solid var(–border);
-border-radius: 100px;
-cursor: pointer;
-transition: background 0.2s;
-}
-
-.user-pill:hover { background: var(–bg-warm); }
-
-.user-pill.active { display: flex; }
-
-.user-avatar {
-width: 28px;
-height: 28px;
-border-radius: 50%;
-background: var(–bg-warm);
-object-fit: cover;
-}
-
-.user-name {
-font-size: 12px;
-color: var(–text-secondary);
-font-weight: 400;
-}
-
-/* ── Sign-in screen ── */
-.signin-screen {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-min-height: 60vh;
-gap: 24px;
-text-align: center;
-padding: 48px;
-}
-
-.signin-screen.hidden { display: none; }
-
-.signin-title {
-font-family: ‘Cormorant Garamond’, serif;
-font-weight: 300;
-font-size: 48px;
-letter-spacing: -1px;
-color: var(–text-primary);
-}
-
-.signin-subtitle {
-font-size: 15px;
-color: var(–text-secondary);
-font-weight: 300;
-max-width: 400px;
-line-height: 1.6;
-}
-
-.signin-btn {
-display: inline-flex;
-align-items: center;
-gap: 10px;
-background: var(–text-primary);
-color: var(–bg-light);
-border: none;
-padding: 14px 32px;
-border-radius: 100px;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 14px;
-font-weight: 400;
-cursor: pointer;
-transition: all 0.2s;
-letter-spacing: 0.3px;
-margin-top: 8px;
-}
-
-.signin-btn:hover {
-background: #2A2419;
-transform: translateY(-1px);
-}
-
-.signin-btn svg {
-width: 18px;
-height: 18px;
-}
-
-.signin-note {
-font-size: 11px;
-color: var(–text-muted);
-max-width: 360px;
-line-height: 1.5;
-}
-
-/* ── Main app (hidden until signed in) ── */
-.app-main { display: none; }
-.app-main.active { display: block; }
-
-/* ── Stats ── */
-.stats-row {
-padding: 0 48px 32px;
-display: flex;
-gap: 40px;
-}
-
-.stat {
-display: flex;
-flex-direction: column;
-gap: 2px;
-}
-
-.stat-value {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 28px;
-font-weight: 400;
-color: var(–text-primary);
-}
-
-.stat-label {
-font-size: 11px;
-text-transform: uppercase;
-letter-spacing: 1.2px;
-color: var(–text-muted);
-font-weight: 500;
-}
-
-/* ── Timeline ── */
-.timeline-container {
-padding: 60px 48px 48px;
-overflow-x: auto;
-}
-
-.timeline-wrapper {
-position: relative;
-min-width: 100%;
-}
-
-.trip-labels-top {
-position: relative;
-min-height: 80px;
-margin-bottom: 8px;
-}
-
-.trip-label-top {
-position: absolute;
-bottom: 0;
-text-align: center;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 0;
-cursor: default;
-transition: opacity 0.2s;
-}
-
-.trip-label-top:hover { opacity: 0.7; }
-
-.trip-label-text {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 15px;
-font-weight: 500;
-color: var(–text-primary);
-white-space: nowrap;
-letter-spacing: 0.2px;
-padding-bottom: 4px;
-position: relative;
-z-index: 2;
-background: var(–bg);
-padding-left: 6px;
-padding-right: 6px;
-}
-
-.trip-label-line {
-width: 1px;
-min-height: 28px;
-background: var(–border);
-position: relative;
-z-index: 1;
-}
-
-.trip-label-dot {
-width: 5px;
-height: 5px;
-border-radius: 50%;
-background: var(–text-muted);
-flex-shrink: 0;
-position: relative;
-z-index: 2;
-}
-
-.months-header {
-display: flex;
-border-bottom: 1px solid var(–border);
-}
-
-.month-cell {
-flex: 1;
-text-align: center;
-padding: 10px 0;
-font-size: 11px;
-font-weight: 500;
-text-transform: uppercase;
-letter-spacing: 1.5px;
-color: var(–text-muted);
-}
-
-.month-cell.current { color: var(–text-primary); }
-
-.timeline-track {
-position: relative;
-height: 56px;
-background: var(–bg-light);
-border-bottom: 1px solid var(–border);
-display: flex;
-}
-
-.month-column {
-flex: 1;
-border-right: 1px solid var(–border);
-}
-
-.month-column:last-child { border-right: none; }
-.month-column.current { background: rgba(196, 168, 124, 0.06); }
-
-.today-marker {
-position: absolute;
-top: 0;
-bottom: 0;
-width: 2px;
-background: var(–accent);
-z-index: 10;
-opacity: 0.7;
-}
-
-.today-marker::after {
-content: ‘today’;
-position: absolute;
-top: -22px;
-left: 50%;
-transform: translateX(-50%);
-font-size: 9px;
-text-transform: uppercase;
-letter-spacing: 1px;
-color: var(–accent);
-white-space: nowrap;
-}
-
-.trip-block {
-position: absolute;
-top: 8px;
-bottom: 8px;
-border-radius: 6px;
-cursor: pointer;
-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-z-index: 5;
-opacity: 0.85;
-}
-
-.trip-block:hover {
-opacity: 1;
-transform: scaleY(1.08);
-box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
-
-.trip-labels-bottom {
-position: relative;
-min-height: 80px;
-margin-top: 8px;
-}
-
-.trip-label-bottom {
-position: absolute;
-top: 0;
-text-align: center;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 0;
-}
-
-.trip-label-bottom .trip-label-dot { order: -2; }
-.trip-label-bottom .trip-label-line { order: -1; }
-
-.trip-date-text {
-font-size: 11px;
-color: var(–text-secondary);
-white-space: nowrap;
-font-weight: 300;
-padding-top: 4px;
-position: relative;
-z-index: 2;
-background: var(–bg);
-padding-left: 6px;
-padding-right: 6px;
-}
-
-.empty-state {
-text-align: center;
-padding: 40px 0;
-color: var(–text-muted);
-font-size: 14px;
-font-weight: 300;
-}
-
-/* ── Controls bar ── */
-.controls-bar {
-padding: 0 48px 48px;
-display: flex;
-gap: 12px;
-align-items: center;
-flex-wrap: wrap;
-}
-
-.secondary-btn {
-background: none;
-color: var(–text-secondary);
-border: 1px solid var(–border);
-padding: 10px 20px;
-border-radius: 100px;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 13px;
-font-weight: 400;
-cursor: pointer;
-transition: all 0.2s;
-}
-
-.secondary-btn:hover {
-background: var(–bg-warm);
-color: var(–text-primary);
-}
-
-/* ── Calendar picker panel ── */
-.cal-picker-panel {
-display: none;
-padding: 0 48px 48px;
-}
-
-.cal-picker-panel.active { display: block; }
-
-.cal-picker-card {
-background: var(–bg-light);
-border: 1px solid var(–border);
-border-radius: 12px;
-padding: 28px;
-max-width: 480px;
-}
-
-.cal-picker-card h3 {
-font-family: ‘Cormorant Garamond’, serif;
-font-weight: 400;
-font-size: 20px;
-margin-bottom: 6px;
-}
-
-.cal-picker-card p {
-font-size: 13px;
-color: var(–text-secondary);
-line-height: 1.7;
-margin-bottom: 16px;
-font-weight: 300;
-}
-
-.cal-select {
-width: 100%;
-padding: 10px 14px;
-border: 1px solid var(–border);
-border-radius: 8px;
-background: var(–bg);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 13px;
-color: var(–text-primary);
-outline: none;
-cursor: pointer;
-appearance: none;
--webkit-appearance: none;
-background-image: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘12’ viewBox=‘0 0 24 24’ fill=‘none’ stroke=’%238A7E6B’ stroke-width=‘2’%3E%3Cpolyline points=‘6 9 12 15 18 9’%3E%3C/polyline%3E%3C/svg%3E”);
-background-repeat: no-repeat;
-background-position: right 14px center;
-padding-right: 36px;
-}
-
-.cal-select:focus { border-color: var(–accent); }
-
-.cal-status {
-font-size: 12px;
-margin-top: 10px;
-min-height: 18px;
-}
-
-.cal-status.success { color: #7A9E7A; }
-.cal-status.error { color: #C47C7C; }
-.cal-status.loading { color: var(–text-muted); }
-
-/* ── Color picker popover ── */
-.color-popover {
-display: none;
-position: fixed;
-z-index: 200;
-background: var(–bg-light);
-border: 1px solid var(–border);
-border-radius: 12px;
-padding: 20px;
-box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-width: 220px;
-}
-
-.color-popover.active { display: block; }
-
-.color-popover-title {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 14px;
-font-weight: 500;
-color: var(–text-primary);
-margin-bottom: 4px;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-
-.color-popover-dates {
-font-size: 11px;
-color: var(–text-muted);
-margin-bottom: 14px;
-font-weight: 300;
-}
-
-.color-popover-grid {
-display: grid;
-grid-template-columns: repeat(6, 24px);
-gap: 10px;
-justify-content: center;
-}
-
-.color-popover-swatch {
-width: 24px;
-height: 24px;
-border-radius: 50%;
-cursor: pointer;
-border: 2px solid transparent;
-transition: all 0.15s;
-flex-shrink: 0;
-}
-
-.color-popover-swatch:hover {
-transform: scale(1.2);
-border-color: var(–text-secondary);
-}
-
-.color-popover-swatch.selected {
-border-color: var(–text-primary);
-transform: scale(1.15);
-}
-
-/* ── User menu dropdown ── */
-.user-menu {
-display: none;
-position: absolute;
-top: 100%;
-right: 0;
-margin-top: 8px;
-background: var(–bg-light);
-border: 1px solid var(–border);
-border-radius: 10px;
-padding: 8px;
-box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-z-index: 100;
-min-width: 160px;
-}
-
-.user-menu.active { display: block; }
-
-.user-menu-item {
-padding: 10px 14px;
-font-size: 13px;
-color: var(–text-secondary);
-cursor: pointer;
-border-radius: 6px;
-transition: background 0.15s;
-}
-
-.user-menu-item:hover {
-background: var(–bg-warm);
-color: var(–text-primary);
-}
-
-.user-pill-wrapper {
-position: relative;
-}
-
-/* ── Privacy link ── */
-.privacy-link {
-font-size: 11px;
-color: var(–text-muted);
-text-decoration: none;
-letter-spacing: 0.3px;
-transition: color 0.2s;
-}
-
-.privacy-link:hover {
-color: var(–text-secondary);
-}
-
-/* ── Mobile timeline (hidden on desktop) ── */
-.mobile-timeline {
-display: none;
-}
-
-/* ── Responsive ── */
-@media (max-width: 768px) {
-.app-header { padding: 24px 20px 0; }
-.stats-row { padding: 0 20px 20px; gap: 20px; }
-.controls-bar { padding: 0 20px 32px; }
-.cal-picker-panel { padding: 0 20px 32px; }
-.app-title { font-size: 28px; }
-.signin-title { font-size: 36px; }
-.signin-screen { padding: 32px 24px; min-height: 50vh; }
-.header-right { gap: 12px; }
-.year-nav { gap: 10px; }
-.year-label { font-size: 20px; }
-
-```
-/* Hide horizontal timeline on mobile */
-.timeline-container { display: none; }
-
-/* Show vertical timeline on mobile */
-.mobile-timeline {
-  display: block;
-  padding: 8px 20px 32px;
-  position: relative;
-}
-
-.mobile-vt {
-  position: relative;
-  padding-left: 48px;
-}
-
-/* The vertical track */
-.mobile-vt-track {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 40px;
-  background: var(--bg-light);
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
-}
-
-/* Month labels along the track */
-.mobile-vt-month {
-  position: absolute;
-  left: -44px;
-  font-size: 10px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--text-muted);
-  width: 36px;
-  text-align: right;
-}
-
-.mobile-vt-month.current {
-  color: var(--text-primary);
-}
-
-/* Month grid lines */
-.mobile-vt-gridline {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--border);
-}
-
-/* Today marker */
-.mobile-vt-today {
-  position: absolute;
-  left: -4px;
-  right: -4px;
-  height: 2px;
-  background: var(--accent);
-  z-index: 10;
-  opacity: 0.7;
-}
-
-.mobile-vt-today::before {
-  content: 'today';
-  position: absolute;
-  left: -44px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--accent);
-  width: 36px;
-  text-align: right;
-}
-
-/* Trip blocks on the track */
-.mobile-vt-block {
-  position: absolute;
-  left: 4px;
-  right: 4px;
-  border-radius: 5px;
-  opacity: 0.85;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  z-index: 5;
-}
-
-.mobile-vt-block:active {
-  opacity: 1;
-}
-
-/* Trip name labels — to the right of the track */
-.mobile-vt-label {
-  position: absolute;
-  left: 56px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-
-.mobile-vt-label-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.mobile-vt-label-line {
-  width: 12px;
-  height: 1px;
-  background: var(--border);
-  flex-shrink: 0;
-}
-
-.mobile-vt-label-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.mobile-vt-label-dates {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-weight: 300;
-  margin-left: 4px;
-}
-
-.mobile-empty {
-  text-align: center;
-  padding: 48px 0;
-  color: var(--text-muted);
-  font-size: 14px;
-  font-weight: 300;
-}
-```
-
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    padding: 40px 48px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .app-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 36px;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+  }
+
+  .app-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .year-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .year-nav button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .year-nav button:hover {
+    background: var(--bg-warm);
+    color: var(--text-primary);
+  }
+
+  .year-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-primary);
+    min-width: 60px;
+    text-align: center;
+  }
+
+  /* ── User pill ── */
+  .user-pill {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 6px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .user-pill:hover { background: var(--bg-warm); }
+
+  .user-pill.active { display: flex; }
+
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg-warm);
+    object-fit: cover;
+  }
+
+  .user-name {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  /* ── Sign-in screen ── */
+  .signin-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 24px;
+    text-align: center;
+    padding: 48px;
+  }
+
+  .signin-screen.hidden { display: none; }
+
+  .signin-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 48px;
+    letter-spacing: -1px;
+    color: var(--text-primary);
+  }
+
+  .signin-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+
+  .signin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--text-primary);
+    color: var(--bg-light);
+    border: none;
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    margin-top: 8px;
+  }
+
+  .signin-btn:hover {
+    background: #2A2419;
+    transform: translateY(-1px);
+  }
+
+  .signin-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .signin-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    max-width: 360px;
+    line-height: 1.5;
+  }
+
+  /* ── Main app (hidden until signed in) ── */
+  .app-main { display: none; }
+  .app-main.active { display: block; }
+
+  /* ── Stats ── */
+  .stats-row {
+    padding: 0 48px 32px;
+    display: flex;
+    gap: 40px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--text-primary);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ── Timeline ── */
+  .timeline-container {
+    padding: 60px 48px 48px;
+    overflow-x: auto;
+  }
+
+  .timeline-wrapper {
+    position: relative;
+    min-width: 100%;
+  }
+
+  .trip-labels-top {
+    position: relative;
+    min-height: 80px;
+    margin-bottom: 8px;
+  }
+
+  .trip-label-top {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    cursor: default;
+    transition: opacity 0.2s;
+  }
+
+  .trip-label-top:hover { opacity: 0.7; }
+
+  .trip-label-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+    padding-bottom: 4px;
+    position: relative;
+    z-index: 2;
+    background: var(--bg);
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .trip-label-line {
+    width: 1px;
+    min-height: 28px;
+    background: var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .trip-label-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .months-header {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .month-cell {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+  }
+
+  .month-cell.current { color: var(--text-primary); }
+
+  .timeline-track {
+    position: relative;
+    height: 56px;
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+  }
+
+  .month-column {
+    flex: 1;
+    border-right: 1px solid var(--border);
+  }
+
+  .month-column:last-child { border-right: none; }
+  .month-column.current { background: rgba(196, 168, 124, 0.06); }
+
+  .today-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    z-index: 10;
+    opacity: 0.7;
+  }
+
+  .today-marker::after {
+    content: 'today';
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .trip-block {
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 5;
+    opacity: 0.85;
+  }
+
+  .trip-block:hover {
+    opacity: 1;
+    transform: scaleY(1.08);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .trip-labels-bottom {
+    position: relative;
+    min-height: 80px;
+    margin-top: 8px;
+  }
+
+  .trip-label-bottom {
+    position: absolute;
+    top: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .trip-label-bottom .trip-label-dot { order: -2; }
+  .trip-label-bottom .trip-label-line { order: -1; }
+
+  .trip-date-text {
+    font-size: 11px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    font-weight: 300;
+    padding-top: 4px;
+    position: relative;
+    z-index: 2;
+    background: var(--bg);
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  /* ── Controls bar ── */
+  .controls-bar {
+    padding: 0 48px 48px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .secondary-btn {
+    background: none;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .secondary-btn:hover {
+    background: var(--bg-warm);
+    color: var(--text-primary);
+  }
+
+  /* ── Calendar picker panel ── */
+  .cal-picker-panel {
+    display: none;
+    padding: 0 48px 48px;
+  }
+
+  .cal-picker-panel.active { display: block; }
+
+  .cal-picker-card {
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    max-width: 480px;
+  }
+
+  .cal-picker-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .cal-picker-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  .cal-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A7E6B' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .cal-select:focus { border-color: var(--accent); }
+
+  .cal-status {
+    font-size: 12px;
+    margin-top: 10px;
+    min-height: 18px;
+  }
+
+  .cal-status.success { color: #7A9E7A; }
+  .cal-status.error { color: #C47C7C; }
+  .cal-status.loading { color: var(--text-muted); }
+
+  /* ── Color picker popover ── */
+  .color-popover {
+    display: none;
+    position: fixed;
+    z-index: 200;
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    width: 220px;
+  }
+
+  .color-popover.active { display: block; }
+
+  .color-popover-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .color-popover-dates {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    font-weight: 300;
+  }
+
+  .color-popover-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 24px);
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .color-popover-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .color-popover-swatch:hover {
+    transform: scale(1.2);
+    border-color: var(--text-secondary);
+  }
+
+  .color-popover-swatch.selected {
+    border-color: var(--text-primary);
+    transform: scale(1.15);
+  }
+
+  /* ── User menu dropdown ── */
+  .user-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    z-index: 100;
+    min-width: 160px;
+  }
+
+  .user-menu.active { display: block; }
+
+  .user-menu-item {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+
+  .user-menu-item:hover {
+    background: var(--bg-warm);
+    color: var(--text-primary);
+  }
+
+  .user-pill-wrapper {
+    position: relative;
+  }
+
+  /* ── Privacy link ── */
+  .privacy-link {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: color 0.2s;
+  }
+
+  .privacy-link:hover {
+    color: var(--text-secondary);
+  }
+
+  /* ── Mobile timeline (hidden on desktop) ── */
+  .mobile-timeline {
+    display: none;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .app-header { padding: 24px 20px 0; }
+    .stats-row { padding: 0 20px 20px; gap: 20px; }
+    .controls-bar { padding: 0 20px 32px; }
+    .cal-picker-panel { padding: 0 20px 32px; }
+    .app-title { font-size: 28px; }
+    .signin-title { font-size: 36px; }
+    .signin-screen { padding: 32px 24px; min-height: 50vh; }
+    .header-right { gap: 12px; }
+    .year-nav { gap: 10px; }
+    .year-label { font-size: 20px; }
+
+    /* Hide horizontal timeline on mobile */
+    .timeline-container { display: none; }
+
+    /* Show vertical timeline on mobile */
+    .mobile-timeline {
+      display: block;
+      padding: 8px 20px 32px;
+      position: relative;
+    }
+
+    .mobile-vt {
+      position: relative;
+      padding-left: 48px;
+    }
+
+    /* The vertical track */
+    .mobile-vt-track {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 40px;
+      background: var(--bg-light);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    /* Month labels along the track */
+    .mobile-vt-month {
+      position: absolute;
+      left: -44px;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      width: 36px;
+      text-align: right;
+    }
+
+    .mobile-vt-month.current {
+      color: var(--text-primary);
+    }
+
+    /* Month grid lines */
+    .mobile-vt-gridline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Today marker */
+    .mobile-vt-today {
+      position: absolute;
+      left: -4px;
+      right: -4px;
+      height: 2px;
+      background: var(--accent);
+      z-index: 10;
+      opacity: 0.7;
+    }
+
+    .mobile-vt-today::before {
+      content: 'today';
+      position: absolute;
+      left: -44px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      width: 36px;
+      text-align: right;
+    }
+
+    /* Trip blocks on the track */
+    .mobile-vt-block {
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      border-radius: 5px;
+      opacity: 0.85;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      z-index: 5;
+    }
+
+    .mobile-vt-block:active {
+      opacity: 1;
+    }
+
+    /* Trip name labels — to the right of the track */
+    .mobile-vt-label {
+      position: absolute;
+      left: 56px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .mobile-vt-label-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .mobile-vt-label-line {
+      width: 12px;
+      height: 1px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .mobile-vt-label-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .mobile-vt-label-dates {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-left: 4px;
+    }
+
+    .mobile-empty {
+      text-align: center;
+      padding: 48px 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 300;
+    }
+  }
 </style>
-
 </head>
 <body>
 
 <!-- ══════ Sign-in Screen ══════ -->
-
 <div class="signin-screen" id="signinScreen">
   <h1 class="signin-title">Voyages</h1>
   <p class="signin-subtitle">A beautiful linear view of your year's travels. Sign in with Google to pull trips from your calendar.</p>
@@ -778,7 +772,6 @@ display: none;
 </div>
 
 <!-- ══════ Main App (hidden until signed in) ══════ -->
-
 <div class="app-main" id="appMain">
   <div class="app-header">
     <div>
@@ -829,7 +822,6 @@ display: none;
   </div>
 
   <!-- Mobile vertical timeline -->
-
   <div class="mobile-timeline" id="mobileTimeline"></div>
 
   <div class="controls-bar">
@@ -839,7 +831,6 @@ display: none;
   </div>
 
   <!-- Calendar picker panel -->
-
   <div class="cal-picker-panel" id="calPickerPanel">
     <div class="cal-picker-card">
       <h3>Choose a Calendar</h3>
@@ -853,7 +844,6 @@ display: none;
 </div>
 
 <!-- Color picker popover -->
-
 <div class="color-popover" id="colorPopover">
   <div class="color-popover-title" id="popoverTitle"></div>
   <div class="color-popover-dates" id="popoverDates"></div>
@@ -861,7 +851,6 @@ display: none;
 </div>
 
 <!-- Google Identity Services -->
-
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <script>
