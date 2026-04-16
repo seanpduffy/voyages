@@ -2,10 +2,8 @@ name: Collect Climate Data
 
 on:
   schedule:
-    # Run every 6 hours
     - cron: '0 */6 * * *'
   workflow_dispatch:
-    # Also allow manual triggering from GitHub UI
 
 jobs:
   collect:
@@ -44,6 +42,10 @@ jobs:
       - name: Commit progress
         if: steps.check.outputs.complete != 'true'
         run: |
+          if [ ! -f climate-grid.json ]; then
+            echo "No data file produced (may have hit rate limits). Will retry next run."
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add climate-grid.json
