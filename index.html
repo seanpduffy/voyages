@@ -597,6 +597,282 @@
     color: var(--text-secondary);
   }
 
+  /* ── Corner dot indicator on trip blocks ── */
+  .trip-block-dot {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1.5px solid var(--bg-light);
+    z-index: 6;
+  }
+
+  /* ── Trip detail panel ── */
+  .panel-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(61, 53, 41, 0.08);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 80;
+    cursor: pointer;
+  }
+
+  .panel-scrim.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .panel-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 440px;
+    max-width: 85vw;
+    background: var(--bg-light);
+    border-left: 1px solid var(--border);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 90;
+    overflow-y: auto;
+    box-shadow: -8px 0 30px rgba(0,0,0,0.06);
+  }
+
+  .panel-overlay.open {
+    transform: translateX(0);
+  }
+
+  .panel-inner {
+    padding: 32px 28px;
+  }
+
+  .panel-trip-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 24px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .panel-color-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .panel-color-dot:hover { transform: scale(1.3); }
+
+  .panel-trip-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    margin-bottom: 20px;
+  }
+
+  .panel-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-radius: 8px;
+  }
+
+  .panel-pbar-wrap {
+    flex: 1;
+    height: 3px;
+    background: var(--bg-warm);
+    border-radius: 2px;
+  }
+
+  .panel-pbar {
+    height: 3px;
+    background: #A3B5A6;
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+
+  .panel-ptxt {
+    font-size: 11px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .panel-day {
+    margin-bottom: 16px;
+  }
+
+  .panel-day-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2px;
+  }
+
+  .panel-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bg-warm);
+  }
+
+  .panel-item:last-child { border-bottom: none; }
+
+  .panel-check {
+    width: 17px;
+    height: 17px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .panel-check.checked {
+    background: #A3B5A6;
+    border-color: #A3B5A6;
+  }
+
+  .panel-check.checked::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 8px;
+    border: solid var(--bg-light);
+    border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg) translateY(-1px);
+  }
+
+  .panel-item-info { flex: 1; min-width: 0; }
+
+  .panel-item-name {
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+
+  .panel-item-name.done {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--border);
+  }
+
+  .panel-item-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .panel-item-conf {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-family: monospace;
+  }
+
+  .panel-pills {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .panel-badge {
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 100px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    line-height: 1;
+  }
+
+  .panel-badge.confirmed { background: #E1F0E1; color: #5A7A5A; }
+  .panel-badge.pending { background: #FAF0DD; color: #8A7040; }
+
+  .panel-pill-btn {
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 100px;
+    letter-spacing: 0.2px;
+    line-height: 1;
+    cursor: pointer;
+    border: 0.5px solid var(--border);
+    background: none;
+    color: #C4B8A4;
+    font-family: inherit;
+    transition: all 0.15s;
+    opacity: 0;
+  }
+
+  .panel-item:hover .panel-pill-btn { opacity: 1; }
+  .panel-plain:hover .panel-pill-btn { opacity: 1; }
+  .panel-pill-btn:hover { border-color: var(--text-muted); color: var(--text-secondary); }
+
+  .panel-plain {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bg-warm);
+  }
+
+  .panel-plain:last-child { border-bottom: none; }
+
+  .panel-plain-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .panel-plain-name {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  .panel-plain-time {
+    font-size: 11px;
+    color: #C5B9A8;
+    margin-top: 1px;
+  }
+
+  .panel-empty {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  .panel-loading {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
   /* ── Mobile timeline (hidden on desktop) ── */
   .mobile-timeline {
     display: none;
@@ -754,6 +1030,11 @@
       font-size: 14px;
       font-weight: 300;
     }
+
+    /* Panel adjustments for mobile */
+    .panel-overlay { width: 100%; max-width: 100%; }
+    .panel-pill-btn { opacity: 1; }
+    .panel-inner { padding: 24px 20px; }
   }
 </style>
 </head>
@@ -850,6 +1131,12 @@
   <div class="color-popover-grid" id="popoverGrid"></div>
 </div>
 
+<!-- Trip detail panel -->
+<div class="panel-scrim" id="panelScrim" onclick="closeTripPanel()"></div>
+<div class="panel-overlay" id="tripPanel">
+  <div class="panel-inner" id="panelInner"></div>
+</div>
+
 <!-- Google Identity Services -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -861,7 +1148,7 @@
   // Type: OAuth 2.0 Client ID → Web application
   // Authorized JavaScript origins: your GitHub Pages URL (e.g. https://yourusername.github.io)
   const CLIENT_ID = '18035821100-6n5ufft97t634livt21f0mvs69tan8dt.apps.googleusercontent.com';
-  const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly openid profile email';
+  const SCOPES = 'https://www.googleapis.com/auth/calendar.events openid profile email';
 
   // ═══════════════════════════════════════
   //  STATE
@@ -1188,7 +1475,17 @@
       block.style.width = Math.max(widthPct, 0.5) + '%';
       block.style.background = trip.color;
       block.title = `${trip.name}\n${formatDateShort(trip.start)} \u2013 ${formatDateShort(trip.end)}`;
-      block.onclick = (e) => { e.stopPropagation(); openColorPopover(trip, e); };
+      block.onclick = (e) => { e.stopPropagation(); openTripPanel(trip); };
+      // Corner dot indicator
+      const dotColor = getDotColor(trip);
+      if (dotColor) {
+        const dot = document.createElement('div');
+        dot.className = 'trip-block-dot';
+        dot.style.background = dotColor;
+        block.appendChild(dot);
+      } else {
+        block.style.opacity = '0.65';
+      }
       track.appendChild(block);
     });
 
@@ -1369,7 +1666,10 @@
       block.style.top = topPct + '%';
       block.style.height = Math.max(heightPct, 0.5) + '%';
       block.style.background = trip.color;
-      block.onclick = (e) => { e.stopPropagation(); openColorPopover(trip, e); };
+      block.onclick = (e) => { e.stopPropagation(); openTripPanel(trip); };
+      // Corner dot indicator
+      const mDotColor = getDotColor(trip);
+      if (!mDotColor) block.style.opacity = '0.65';
       track.appendChild(block);
 
       // Label to the right
@@ -1492,6 +1792,292 @@
   }
 
   // ═══════════════════════════════════════
+  //  TRIP DETAIL PANEL
+  // ═══════════════════════════════════════
+  let panelTrip = null;
+
+  // Booking status storage (localStorage for now, extended properties later)
+  function bookingKey(trip) { return 'vb_' + trip.name + '|' + trip.start; }
+
+  function getBookingData(trip) {
+    try { return JSON.parse(localStorage.getItem(bookingKey(trip)) || '{}'); } catch(e) { return {}; }
+  }
+
+  function saveBookingData(trip, data) {
+    try { localStorage.setItem(bookingKey(trip), JSON.stringify(data)); } catch(e) {}
+    updateTripSummary(trip, data);
+  }
+
+  // Trip summary for corner dots (avoids fetching events just for dots)
+  function updateTripSummary(trip, bookingData) {
+    const entries = Object.values(bookingData);
+    const tracked = entries.filter(e => e.status === 'booked' || e.status === 'needs_booking');
+    const booked = entries.filter(e => e.status === 'booked');
+    const summary = { tracked: tracked.length, booked: booked.length };
+    try { localStorage.setItem('vs_' + tripKey(trip), JSON.stringify(summary)); } catch(e) {}
+  }
+
+  function getTripSummary(trip) {
+    try { return JSON.parse(localStorage.getItem('vs_' + tripKey(trip)) || '{}'); } catch(e) { return {}; }
+  }
+
+  // Fetch timed events within a trip's date range
+  async function fetchTripEvents(trip) {
+    if (!selectedCalId || !accessToken) return [];
+    const timeMin = new Date(trip.start + 'T00:00:00').toISOString();
+    const endDate = new Date(trip.end + 'T00:00:00');
+    endDate.setDate(endDate.getDate() + 1);
+    const timeMax = endDate.toISOString();
+
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(selectedCalId)}/events`
+      + `?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime&maxResults=200`;
+
+    try {
+      const resp = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+      if (!resp.ok) return [];
+      const data = await resp.json();
+      return (data.items || [])
+        .filter(e => e.start && e.start.dateTime) // Only timed events
+        .map(e => {
+          const dt = new Date(e.start.dateTime);
+          // Read extended properties set by the Apps Script scanner
+          const props = e.extendedProperties?.shared || {};
+          const scanStatus = props['voyages_status'] || null;
+          const scanConf = props['voyages_conf'] || null;
+          return {
+            id: e.id,
+            name: e.summary || 'Untitled',
+            dateStr: e.start.dateTime.split('T')[0],
+            time: dt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+            sortKey: e.start.dateTime,
+            scanStatus: scanStatus,
+            scanConf: scanConf,
+          };
+        })
+        .sort((a, b) => a.sortKey.localeCompare(b.sortKey));
+    } catch(err) {
+      console.error('Fetch trip events error:', err);
+      return [];
+    }
+  }
+
+  async function openTripPanel(trip) {
+    panelTrip = trip;
+    const panel = document.getElementById('tripPanel');
+    const scrim = document.getElementById('panelScrim');
+    const inner = document.getElementById('panelInner');
+
+    // Show loading state
+    inner.innerHTML = `
+      <div class="panel-trip-title">${trip.name}</div>
+      <div class="panel-trip-sub">${formatDateShort(trip.start)} \u2013 ${formatDateShort(trip.end)}</div>
+      <div class="panel-loading">Loading itinerary...</div>
+    `;
+    panel.classList.add('open');
+    scrim.classList.add('open');
+
+    // Fetch timed events
+    const events = await fetchTripEvents(trip);
+    renderPanelContent(trip, events);
+  }
+
+  function closeTripPanel() {
+    document.getElementById('tripPanel').classList.remove('open');
+    document.getElementById('panelScrim').classList.remove('open');
+    panelTrip = null;
+    // Re-render to update corner dots
+    render();
+  }
+
+  function renderPanelContent(trip, events) {
+    const inner = document.getElementById('panelInner');
+    const bookingData = getBookingData(trip);
+    const days = Math.round((new Date(trip.end + 'T00:00:00') - new Date(trip.start + 'T00:00:00')) / 86400000) + 1;
+
+    // Initialize booking status for new events
+    // Priority: localStorage manual override > Apps Script scan data > default 'activity'
+    events.forEach(ev => {
+      if (!bookingData[ev.id]) {
+        if (ev.scanStatus) {
+          // Use the Apps Script scanner's classification
+          bookingData[ev.id] = {
+            status: ev.scanStatus,
+            name: ev.name,
+            conf: ev.scanConf || null
+          };
+        } else {
+          bookingData[ev.id] = { status: 'activity', name: ev.name };
+        }
+      } else if (ev.scanConf && !bookingData[ev.id].conf) {
+        // Update conf number from scan even if status was manually set
+        bookingData[ev.id].conf = ev.scanConf;
+      }
+    });
+    saveBookingData(trip, bookingData);
+
+    // Count tracked items
+    const tracked = events.filter(ev => bookingData[ev.id]?.status === 'booked' || bookingData[ev.id]?.status === 'needs_booking');
+    const booked = events.filter(ev => bookingData[ev.id]?.status === 'booked');
+
+    // Build HTML
+    let html = `
+      <div class="panel-trip-title">${trip.name} <div class="panel-color-dot" style="background:${trip.color}" onclick="openColorPopover(panelTrip, event)"></div></div>
+      <div class="panel-trip-sub">${formatDateShort(trip.start)} \u2013 ${formatDateShort(trip.end)} \u00b7 ${days} days</div>
+    `;
+
+    if (tracked.length > 0) {
+      const pct = Math.round((booked.length / tracked.length) * 100);
+      html += `
+        <div class="panel-progress">
+          <div class="panel-pbar-wrap"><div class="panel-pbar" id="panelPbar" style="width:${pct}%"></div></div>
+          <span class="panel-ptxt" id="panelPtxt">${booked.length} of ${tracked.length} booked</span>
+        </div>
+      `;
+    }
+
+    if (events.length === 0) {
+      html += '<div class="panel-empty">No events within this trip\'s dates.<br>Add timed events to your calendar to see them here.</div>';
+      inner.innerHTML = html;
+      return;
+    }
+
+    // Group by date
+    const grouped = {};
+    events.forEach(ev => {
+      if (!grouped[ev.dateStr]) grouped[ev.dateStr] = [];
+      grouped[ev.dateStr].push(ev);
+    });
+
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    Object.keys(grouped).sort().forEach(dateStr => {
+      const d = new Date(dateStr + 'T00:00:00');
+      const label = `${dayNames[d.getDay()]}, ${monthNames[d.getMonth()]} ${d.getDate()}`;
+      html += `<div class="panel-day"><div class="panel-day-label">${label}</div>`;
+
+      grouped[dateStr].forEach(ev => {
+        const status = bookingData[ev.id]?.status || 'activity';
+
+        if (status === 'booked' || status === 'needs_booking') {
+          const isBooked = status === 'booked';
+          const conf = bookingData[ev.id]?.conf || '';
+          html += `<div class="panel-item" data-evid="${ev.id}">
+            <div class="panel-check${isBooked ? ' checked' : ''}" onclick="toggleBooking('${ev.id}')"></div>
+            <div class="panel-item-info">
+              <div class="panel-item-name${isBooked ? ' done' : ''}">${ev.name}</div>
+              <div class="panel-item-time">${ev.time}</div>
+              ${conf ? `<div class="panel-item-conf">${conf}</div>` : ''}
+            </div>
+            <div class="panel-pills">
+              <button class="panel-pill-btn" onclick="untrackEvent('${ev.id}')">untrack</button>
+              <span class="panel-badge ${isBooked ? 'confirmed' : 'pending'}">${isBooked ? 'Booked' : 'Needs booking'}</span>
+            </div>
+          </div>`;
+        } else {
+          html += `<div class="panel-plain" data-evid="${ev.id}">
+            <div class="panel-plain-dot"></div>
+            <div class="panel-item-info">
+              <div class="panel-plain-name">${ev.name}</div>
+              <div class="panel-plain-time">${ev.time}</div>
+            </div>
+            <div class="panel-pills">
+              <button class="panel-pill-btn" onclick="trackEvent('${ev.id}')">track</button>
+            </div>
+          </div>`;
+        }
+      });
+
+      html += '</div>';
+    });
+
+    inner.innerHTML = html;
+  }
+
+  function toggleBooking(evId) {
+    if (!panelTrip) return;
+    const data = getBookingData(panelTrip);
+    if (!data[evId]) return;
+    const newStatus = data[evId].status === 'booked' ? 'needs_booking' : 'booked';
+    data[evId].status = newStatus;
+    saveBookingData(panelTrip, data);
+    writeStatusToCalendar(evId, newStatus);
+    refreshPanelInPlace();
+  }
+
+  function trackEvent(evId) {
+    if (!panelTrip) return;
+    const data = getBookingData(panelTrip);
+    if (!data[evId]) return;
+    data[evId].status = 'needs_booking';
+    saveBookingData(panelTrip, data);
+    writeStatusToCalendar(evId, 'needs_booking');
+    refreshPanelInPlace();
+  }
+
+  function untrackEvent(evId) {
+    if (!panelTrip) return;
+    const data = getBookingData(panelTrip);
+    if (!data[evId]) return;
+    data[evId].status = 'activity';
+    saveBookingData(panelTrip, data);
+    writeStatusToCalendar(evId, 'activity');
+    refreshPanelInPlace();
+  }
+
+  // Write booking status to calendar extended properties
+  // so the Apps Script scanner respects manual changes
+  async function writeStatusToCalendar(evId, status) {
+    if (!selectedCalId || !accessToken) return;
+    try {
+      const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(selectedCalId)}/events/${evId}`;
+      const patchBody = {
+        extendedProperties: {
+          shared: {
+            'voyages_status': status,
+            'voyages_manual': 'true',
+            'voyages_last_scan': new Date().toISOString()
+          }
+        }
+      };
+      await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(patchBody)
+      });
+    } catch (e) {
+      console.error('Failed to write status to calendar:', e);
+    }
+  }
+
+  // Re-render panel without re-fetching events
+  let cachedPanelEvents = [];
+  const _origRenderPanel = renderPanelContent;
+
+  // Override renderPanelContent to cache events
+  renderPanelContent = function(trip, events) {
+    cachedPanelEvents = events;
+    _origRenderPanel(trip, events);
+  };
+
+  function refreshPanelInPlace() {
+    if (panelTrip && cachedPanelEvents.length > 0) {
+      _origRenderPanel(panelTrip, cachedPanelEvents);
+    }
+  }
+
+  // ── Corner dot helpers ──
+  function getDotColor(trip) {
+    const summary = getTripSummary(trip);
+    if (!summary.tracked || summary.tracked === 0) return null;
+    if (summary.booked >= summary.tracked) return '#5A7A5A'; // green - all booked
+    return '#C4933A'; // amber - has open items
+  }
+
+  // ═══════════════════════════════════════
   //  GLOBAL LISTENERS
   // ═══════════════════════════════════════
   document.addEventListener('click', (e) => {
@@ -1505,6 +2091,7 @@
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
+      closeTripPanel();
       closeColorPopover();
       closeUserMenu();
       document.getElementById('calPickerPanel').classList.remove('active');
