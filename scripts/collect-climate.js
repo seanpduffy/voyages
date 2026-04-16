@@ -174,6 +174,9 @@ async function main() {
     process.exit(0);
   }
 
+  // Save initial state so there's always a file for git to commit
+  saveProgress(climateData, monthsDone);
+
   let activeVars = [...DAILY_VARS];
   let locationCallsThisRun = 0;
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
