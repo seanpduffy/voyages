@@ -1,0 +1,57 @@
+name: Collect Climate Data
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    # Also allow manual triggering from GitHub UI
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Check if already complete
+        id: check
+        run: |
+          if [ -f climate-grid.json ]; then
+            MONTHS=$(node -e "const d=JSON.parse(require('fs').readFileSync('climate-grid.json','utf8'));console.log(d.monthsDone||0)")
+            echo "months_done=$MONTHS" >> $GITHUB_OUTPUT
+            if [ "$MONTHS" = "12" ]; then
+              echo "complete=true" >> $GITHUB_OUTPUT
+              echo "All 12 months already collected. Skipping."
+            else
+              echo "complete=false" >> $GITHUB_OUTPUT
+              echo "Progress: $MONTHS/12 months. Continuing..."
+            fi
+          else
+            echo "months_done=0" >> $GITHUB_OUTPUT
+            echo "complete=false" >> $GITHUB_OUTPUT
+            echo "No existing data. Starting fresh."
+          fi
+
+      - name: Collect climate data
+        if: steps.check.outputs.complete != 'true'
+        run: node scripts/collect-climate.js
+
+      - name: Commit progress
+        if: steps.check.outputs.complete != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add climate-grid.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            MONTHS=$(node -e "const d=JSON.parse(require('fs').readFileSync('climate-grid.json','utf8'));console.log(d.monthsDone||0)")
+            git commit -m "Climate data: ${MONTHS}/12 months collected [automated]"
+            git push
+            echo "Committed: ${MONTHS}/12 months"
+          fi
