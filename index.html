@@ -650,6 +650,182 @@
     padding: 32px 28px;
   }
 
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .panel-close-x {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg-warm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    transition: all 0.15s;
+    padding: 0;
+    font-family: inherit;
+  }
+
+  .panel-close-x:hover {
+    background: var(--border);
+    color: var(--text-primary);
+  }
+
+  .panel-close-x::before {
+    content: '\00d7';
+    font-size: 20px;
+    line-height: 1;
+    margin-top: -2px;
+  }
+
+  .panel-climate {
+    padding: 14px 16px;
+    background: var(--bg);
+    border-radius: 8px;
+    margin-top: 16px;
+    margin-bottom: 20px;
+  }
+
+  .panel-climate-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .panel-climate-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .panel-climate-loc {
+    font-size: 10px;
+    color: #C5B9A8;
+    font-style: italic;
+  }
+
+  .panel-climate-temp-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .panel-climate-temp-low {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    min-width: 32px;
+  }
+
+  .panel-climate-temp-high {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--text-primary);
+    min-width: 32px;
+    text-align: right;
+  }
+
+  .panel-climate-temp-bar {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #B5C9E0 0%, #E8C49A 50%, #D4967A 100%);
+    position: relative;
+  }
+
+  .panel-climate-temp-band {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: rgba(61,53,41,0.25);
+    border-radius: 3px;
+    border: 1px solid var(--text-primary);
+  }
+
+  .panel-climate-rain {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+  }
+
+  .panel-climate-rain-label {
+    min-width: 30px;
+  }
+
+  .panel-climate-rain-val {
+    min-width: 30px;
+    text-align: right;
+  }
+
+  .panel-climate-rain-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--bg-warm);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .panel-climate-rain-fill {
+    height: 100%;
+    background: #8FA3B5;
+    border-radius: 2px;
+  }
+
+  .panel-preview {
+    margin-top: 8px;
+    margin-left: 27px;
+    padding: 8px 10px;
+    background: var(--bg);
+    border-radius: 6px;
+    border-left: 2px solid var(--border);
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .panel-preview:hover {
+    background: var(--bg-warm);
+  }
+
+  .panel-preview-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: pre-wrap;
+  }
+
+  .panel-preview.expanded .panel-preview-text {
+    -webkit-line-clamp: unset;
+    display: block;
+  }
+
+  .panel-preview-toggle {
+    font-size: 9px;
+    color: var(--accent);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
   .panel-trip-title {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
@@ -724,11 +900,14 @@
   }
 
   .panel-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bg-warm);
+  }
+
+  .panel-item-row {
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--bg-warm);
   }
 
   .panel-item:last-child { border-bottom: none; }
@@ -824,6 +1003,7 @@
   }
 
   .panel-item:hover .panel-pill-btn { opacity: 1; }
+  .panel-item-row:hover .panel-pill-btn { opacity: 1; }
   .panel-plain:hover .panel-pill-btn { opacity: 1; }
   .panel-pill-btn:hover { border-color: var(--text-muted); color: var(--text-secondary); }
 
@@ -1343,10 +1523,21 @@
           const d = new Date(e.end.date + 'T00:00:00');
           d.setDate(d.getDate() - 1);
           const endDate = d.toISOString().split('T')[0];
+          // Read trip-level extended properties (climate, location)
+          const props = e.extendedProperties?.shared || {};
+          const startMonth = new Date(startDate + 'T00:00:00').getMonth() + 1;
+          const climateRaw = props['voyages_climate_' + startMonth] || null;
+          let climate = null;
+          if (climateRaw) {
+            try { climate = JSON.parse(climateRaw); } catch(e) {}
+          }
           return {
             name: e.summary || 'Untitled Trip',
             start: startDate,
             end: endDate,
+            id: e.id,
+            location: props['voyages_location'] || null,
+            climate: climate,
           };
         })
         .filter(t => t.start <= t.end);
@@ -1852,6 +2043,7 @@
             sortKey: e.start.dateTime,
             scanStatus: scanStatus,
             scanConf: scanConf,
+            description: e.description || '',
           };
         })
         .sort((a, b) => a.sortKey.localeCompare(b.sortKey));
@@ -1869,8 +2061,13 @@
 
     // Show loading state
     inner.innerHTML = `
-      <div class="panel-trip-title">${trip.name}</div>
-      <div class="panel-trip-sub">${formatDateShort(trip.start)} \u2013 ${formatDateShort(trip.end)}</div>
+      <div class="panel-head">
+        <div>
+          <div class="panel-trip-title">${escapeHtml(trip.name)}</div>
+          <div class="panel-trip-sub">${formatDateShort(trip.start)} \u2013 ${formatDateShort(trip.end)}</div>
+        </div>
+        <button class="panel-close-x" onclick="closeTripPanel()" aria-label="Close"></button>
+      </div>
       <div class="panel-loading">Loading itinerary...</div>
     `;
     panel.classList.add('open');
@@ -1885,8 +2082,62 @@
     document.getElementById('tripPanel').classList.remove('open');
     document.getElementById('panelScrim').classList.remove('open');
     panelTrip = null;
-    // Re-render to update corner dots
     render();
+  }
+
+  // Simple HTML escape for safety
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+  }
+
+  // Render the climate strip HTML
+  function renderClimateStrip(trip) {
+    if (!trip.climate) return '';
+    const c = trip.climate;
+    const loc = trip.location || '';
+    const monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][new Date(trip.start + 'T00:00:00').getMonth()];
+    
+    // Position the temperature band on the gradient (normalize to 0-100°F range)
+    const minScale = Math.max(0, Math.min(100, c.tempLow));
+    const maxScale = Math.max(0, Math.min(100, c.tempHigh));
+    const leftPct = minScale;
+    const widthPct = Math.max(5, maxScale - minScale);
+    
+    return `
+      <div class="panel-climate">
+        <div class="panel-climate-row">
+          <div class="panel-climate-label">Typical weather in ${monthName}</div>
+          <div class="panel-climate-loc">${escapeHtml(loc)}</div>
+        </div>
+        <div class="panel-climate-temp-row">
+          <span class="panel-climate-temp-low">${c.tempLow}\u00b0</span>
+          <div class="panel-climate-temp-bar">
+            <div class="panel-climate-temp-band" style="left:${leftPct}%; width:${widthPct}%;"></div>
+          </div>
+          <span class="panel-climate-temp-high">${c.tempHigh}\u00b0</span>
+        </div>
+        <div class="panel-climate-rain">
+          <span class="panel-climate-rain-label">Rain</span>
+          <div class="panel-climate-rain-bar"><div class="panel-climate-rain-fill" style="width:${c.rainPct}%"></div></div>
+          <span class="panel-climate-rain-val">${c.rainPct}%</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // Render expandable description preview
+  function renderDescPreview(description) {
+    if (!description || description.trim().length === 0) return '';
+    const clean = description.trim();
+    // Only show if there's meaningful content
+    if (clean.length < 10) return '';
+    return `
+      <div class="panel-preview" onclick="this.classList.toggle('expanded')">
+        <div class="panel-preview-text">${escapeHtml(clean)}</div>
+        <span class="panel-preview-toggle">Tap to expand</span>
+      </div>
+    `;
   }
 
   function renderPanelContent(trip, events) {
@@ -1895,36 +2146,37 @@
     const days = Math.round((new Date(trip.end + 'T00:00:00') - new Date(trip.start + 'T00:00:00')) / 86400000) + 1;
 
     // Initialize booking status for new events
-    // Priority: localStorage manual override > Apps Script scan data > default 'activity'
     events.forEach(ev => {
       if (!bookingData[ev.id]) {
         if (ev.scanStatus) {
-          // Use the Apps Script scanner's classification
-          bookingData[ev.id] = {
-            status: ev.scanStatus,
-            name: ev.name,
-            conf: ev.scanConf || null
-          };
+          bookingData[ev.id] = { status: ev.scanStatus, name: ev.name, conf: ev.scanConf || null };
         } else {
           bookingData[ev.id] = { status: 'activity', name: ev.name };
         }
       } else if (ev.scanConf && !bookingData[ev.id].conf) {
-        // Update conf number from scan even if status was manually set
         bookingData[ev.id].conf = ev.scanConf;
       }
     });
     saveBookingData(trip, bookingData);
 
-    // Count tracked items
     const tracked = events.filter(ev => bookingData[ev.id]?.status === 'booked' || bookingData[ev.id]?.status === 'needs_booking');
     const booked = events.filter(ev => bookingData[ev.id]?.status === 'booked');
 
-    // Build HTML
+    // Build HTML with close button in header
     let html = `
-      <div class="panel-trip-title">${trip.name} <div class="panel-color-dot" style="background:${trip.color}" onclick="openColorPopover(panelTrip, event)"></div></div>
-      <div class="panel-trip-sub">${formatDateShort(trip.start)} \u2013 ${formatDateShort(trip.end)} \u00b7 ${days} days</div>
+      <div class="panel-head">
+        <div>
+          <div class="panel-trip-title">${escapeHtml(trip.name)} <div class="panel-color-dot" style="background:${trip.color}" onclick="openColorPopover(panelTrip, event)"></div></div>
+          <div class="panel-trip-sub">${formatDateShort(trip.start)} \u2013 ${formatDateShort(trip.end)} \u00b7 ${days} days</div>
+        </div>
+        <button class="panel-close-x" onclick="closeTripPanel()" aria-label="Close"></button>
+      </div>
     `;
 
+    // Climate strip (if data available)
+    html += renderClimateStrip(trip);
+
+    // Progress bar
     if (tracked.length > 0) {
       const pct = Math.round((booked.length / tracked.length) * 100);
       html += `
@@ -1963,22 +2215,25 @@
           const isBooked = status === 'booked';
           const conf = bookingData[ev.id]?.conf || '';
           html += `<div class="panel-item" data-evid="${ev.id}">
-            <div class="panel-check${isBooked ? ' checked' : ''}" onclick="toggleBooking('${ev.id}')"></div>
-            <div class="panel-item-info">
-              <div class="panel-item-name${isBooked ? ' done' : ''}">${ev.name}</div>
-              <div class="panel-item-time">${ev.time}</div>
-              ${conf ? `<div class="panel-item-conf">${conf}</div>` : ''}
+            <div class="panel-item-row">
+              <div class="panel-check${isBooked ? ' checked' : ''}" onclick="toggleBooking('${ev.id}')"></div>
+              <div class="panel-item-info">
+                <div class="panel-item-name${isBooked ? ' done' : ''}">${escapeHtml(ev.name)}</div>
+                <div class="panel-item-time">${ev.time}</div>
+                ${conf ? `<div class="panel-item-conf">${escapeHtml(conf)}</div>` : ''}
+              </div>
+              <div class="panel-pills">
+                <button class="panel-pill-btn" onclick="untrackEvent('${ev.id}')">untrack</button>
+                <span class="panel-badge ${isBooked ? 'confirmed' : 'pending'}">${isBooked ? 'Booked' : 'Needs booking'}</span>
+              </div>
             </div>
-            <div class="panel-pills">
-              <button class="panel-pill-btn" onclick="untrackEvent('${ev.id}')">untrack</button>
-              <span class="panel-badge ${isBooked ? 'confirmed' : 'pending'}">${isBooked ? 'Booked' : 'Needs booking'}</span>
-            </div>
+            ${isBooked ? renderDescPreview(ev.description) : ''}
           </div>`;
         } else {
           html += `<div class="panel-plain" data-evid="${ev.id}">
             <div class="panel-plain-dot"></div>
             <div class="panel-item-info">
-              <div class="panel-plain-name">${ev.name}</div>
+              <div class="panel-plain-name">${escapeHtml(ev.name)}</div>
               <div class="panel-plain-time">${ev.time}</div>
             </div>
             <div class="panel-pills">
