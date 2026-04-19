@@ -53,6 +53,36 @@
     font-weight: 300;
   }
 
+  /* ── View navigation tabs ── */
+  .view-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 48px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .view-tab {
+    padding: 12px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+  }
+
+  .view-tab:hover { color: var(--text-secondary); }
+  .view-tab.active { color: var(--text-primary); border-bottom-color: var(--accent); }
+
+  .view-container { display: none; }
+  .view-container.active { display: block; }
+
   .header-right {
     display: flex;
     align-items: center;
@@ -597,6 +627,171 @@
     color: var(--text-secondary);
   }
 
+  /* ── Climate explorer (When to go) ── */
+  .climate-explorer {
+    padding: 24px 48px 32px;
+  }
+
+  .climate-explorer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .climate-month-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--text-primary);
+    font-weight: 300;
+  }
+
+  .climate-map-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2/1;
+    background: var(--bg-warm);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+  }
+
+  .climate-map-wrap canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: block;
+  }
+
+  .climate-tooltip {
+    position: absolute;
+    background: rgba(61,53,41,0.95);
+    color: var(--bg-light);
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    pointer-events: none;
+    transform: translate(-50%, -120%);
+    opacity: 0;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+    z-index: 10;
+  }
+
+  .climate-tooltip.visible { opacity: 1; }
+  .climate-tooltip-loc { font-weight: 500; margin-bottom: 3px; }
+  .climate-tooltip-stats { font-size: 11px; color: #DDD5C5; line-height: 1.4; }
+
+  .climate-slider-wrap {
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: var(--bg-light);
+    border-radius: 10px;
+    border: 0.5px solid var(--border);
+  }
+
+  .climate-slider-months {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    padding: 0 4px;
+    user-select: none;
+  }
+
+  .climate-slider-months span {
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+
+  .climate-slider-months span:hover { color: var(--text-primary); }
+
+  .climate-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+    margin: 6px 0;
+  }
+
+  .climate-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--text-primary);
+    cursor: pointer;
+    border: 2px solid var(--bg-light);
+    box-shadow: 0 0 0 0.5px var(--text-secondary);
+  }
+
+  .climate-legends {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 16px;
+  }
+
+  .climate-legend {
+    padding: 12px 16px;
+    background: var(--bg-light);
+    border-radius: 8px;
+    border: 0.5px solid var(--border);
+  }
+
+  .climate-legend-title {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .climate-legend-bar {
+    height: 14px;
+    border-radius: 2px;
+    margin-bottom: 6px;
+  }
+
+  .climate-legend-bar.temp {
+    background: linear-gradient(to right, #6B8AA8 0%, #A3B5A6 30%, #E8C49A 55%, #D48A6A 80%, #B85C3A 100%);
+  }
+
+  .climate-legend-bar.rain {
+    position: relative;
+    background: var(--bg-light);
+    border: 0.5px solid var(--border);
+    overflow: hidden;
+  }
+
+  .climate-legend-scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: var(--text-secondary);
+  }
+
+  .climate-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 16px;
+  }
+
+  .climate-loading {
+    text-align: center;
+    padding: 80px 0;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
   /* ── Corner dot indicator on trip blocks ── */
   .trip-block-dot {
     position: absolute;
@@ -798,6 +993,10 @@
     line-height: 1.5;
     cursor: pointer;
     transition: background 0.15s;
+  }
+
+  .panel-plain .panel-preview {
+    margin-left: 15px;
   }
 
   .panel-preview:hover {
@@ -1008,11 +1207,14 @@
   .panel-pill-btn:hover { border-color: var(--text-muted); color: var(--text-secondary); }
 
   .panel-plain {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bg-warm);
+  }
+
+  .panel-plain-row {
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--bg-warm);
   }
 
   .panel-plain:last-child { border-bottom: none; }
@@ -1215,6 +1417,12 @@
     .panel-overlay { width: 100%; max-width: 100%; }
     .panel-pill-btn { opacity: 1; }
     .panel-inner { padding: 24px 20px; }
+
+    /* Climate explorer mobile */
+    .climate-explorer { padding: 20px; }
+    .climate-legends { grid-template-columns: 1fr; }
+    .view-tabs { padding: 0 20px; }
+    .view-tab { padding: 10px 16px; font-size: 11px; }
   }
 </style>
 </head>
@@ -1257,6 +1465,15 @@
       </div>
     </div>
   </div>
+
+  <!-- View navigation tabs -->
+  <div class="view-tabs">
+    <button class="view-tab active" onclick="switchView('timeline')">Timeline</button>
+    <button class="view-tab" onclick="switchView('climate')">When to go</button>
+  </div>
+
+  <!-- Timeline view -->
+  <div class="view-container active" id="viewTimeline">
 
   <div class="stats-row">
     <div class="stat">
@@ -1302,6 +1519,44 @@
       <div class="cal-status" id="calStatus"></div>
     </div>
   </div>
+  </div> <!-- /viewTimeline -->
+
+  <!-- Climate explorer view (When to go) -->
+  <div class="view-container" id="viewClimate">
+    <div class="climate-explorer">
+      <div class="climate-explorer-header">
+        <div>
+          <div class="climate-month-label" id="climateMonthLabel">January</div>
+        </div>
+      </div>
+      <div class="climate-map-wrap" id="climateMapStack">
+        <canvas id="climateTempCanvas"></canvas>
+        <canvas id="climateRainCanvas"></canvas>
+        <div class="climate-tooltip" id="climateTooltip">
+          <div class="climate-tooltip-loc" id="climateTooltipLoc"></div>
+          <div class="climate-tooltip-stats" id="climateTooltipStats"></div>
+        </div>
+      </div>
+      <div class="climate-slider-wrap">
+        <div class="climate-slider-months" id="climateMonthTicks"></div>
+        <input type="range" min="0" max="1100" value="0" step="1" class="climate-slider" id="climateSlider">
+      </div>
+      <div class="climate-legends">
+        <div class="climate-legend">
+          <div class="climate-legend-title">Temperature</div>
+          <div class="climate-legend-bar temp"></div>
+          <div class="climate-legend-scale"><span>&minus;20&deg;F</span><span>40&deg;</span><span>70&deg;</span><span>100&deg;+</span></div>
+        </div>
+        <div class="climate-legend">
+          <div class="climate-legend-title">Rain probability</div>
+          <div class="climate-legend-bar rain" id="climateRainLegend"></div>
+          <div class="climate-legend-scale"><span>Dry</span><span></span><span></span><span>Wet</span></div>
+        </div>
+      </div>
+      <p class="climate-note">Hover the map to see details &middot; Drag the slider to explore the year</p>
+    </div>
+  </div>
+
 </div>
 
 <!-- Color picker popover -->
@@ -2227,18 +2482,21 @@
                 <span class="panel-badge ${isBooked ? 'confirmed' : 'pending'}">${isBooked ? 'Booked' : 'Needs booking'}</span>
               </div>
             </div>
-            ${isBooked ? renderDescPreview(ev.description) : ''}
+            ${renderDescPreview(ev.description)}
           </div>`;
         } else {
           html += `<div class="panel-plain" data-evid="${ev.id}">
-            <div class="panel-plain-dot"></div>
-            <div class="panel-item-info">
-              <div class="panel-plain-name">${escapeHtml(ev.name)}</div>
-              <div class="panel-plain-time">${ev.time}</div>
+            <div class="panel-plain-row">
+              <div class="panel-plain-dot"></div>
+              <div class="panel-item-info">
+                <div class="panel-plain-name">${escapeHtml(ev.name)}</div>
+                <div class="panel-plain-time">${ev.time}</div>
+              </div>
+              <div class="panel-pills">
+                <button class="panel-pill-btn" onclick="trackEvent('${ev.id}')">track</button>
+              </div>
             </div>
-            <div class="panel-pills">
-              <button class="panel-pill-btn" onclick="trackEvent('${ev.id}')">track</button>
-            </div>
+            ${renderDescPreview(ev.description)}
           </div>`;
         }
       });
@@ -2330,6 +2588,387 @@
     if (!summary.tracked || summary.tracked === 0) return null;
     if (summary.booked >= summary.tracked) return '#5A7A5A'; // green - all booked
     return '#C4933A'; // amber - has open items
+  }
+
+  // ═══════════════════════════════════════
+  //  VIEW SWITCHING
+  // ═══════════════════════════════════════
+  let currentView = 'timeline';
+  let climateDataLoaded = false;
+  let climateGridData = null;
+
+  function switchView(view) {
+    currentView = view;
+    document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
+
+    if (view === 'timeline') {
+      document.querySelector('.view-tab:first-child').classList.add('active');
+      document.getElementById('viewTimeline').classList.add('active');
+      // Show timeline-specific header elements
+      document.querySelector('.year-nav').style.display = '';
+    } else {
+      document.querySelector('.view-tab:nth-child(2)').classList.add('active');
+      document.getElementById('viewClimate').classList.add('active');
+      // Hide year nav in climate view
+      document.querySelector('.year-nav').style.display = 'none';
+      if (!climateDataLoaded) loadClimateData();
+    }
+  }
+
+  // ═══════════════════════════════════════
+  //  CLIMATE EXPLORER
+  // ═══════════════════════════════════════
+  const CW = 900, CH = 450;
+  let climateInitialized = false;
+
+  // Temperature color mapping
+  function tempToColor(temp) {
+    if (temp < -20) temp = -20;
+    if (temp > 100) temp = 100;
+    const stops = [
+      { t: -20, r: 107, g: 138, b: 168 },
+      { t: 30,  r: 163, g: 181, b: 166 },
+      { t: 60,  r: 232, g: 196, b: 154 },
+      { t: 85,  r: 212, g: 138, b: 106 },
+      { t: 100, r: 184, g: 92, b: 58 },
+    ];
+    for (let i = 0; i < stops.length - 1; i++) {
+      if (temp >= stops[i].t && temp <= stops[i+1].t) {
+        const f = (temp - stops[i].t) / (stops[i+1].t - stops[i].t);
+        return {
+          r: Math.round(stops[i].r + (stops[i+1].r - stops[i].r) * f),
+          g: Math.round(stops[i].g + (stops[i+1].g - stops[i].g) * f),
+          b: Math.round(stops[i].b + (stops[i+1].b - stops[i].b) * f),
+        };
+      }
+    }
+    return stops[stops.length - 1];
+  }
+
+  // Build blue noise thresholds for rain dots
+  function buildBlueNoise(gridW, gridH) {
+    const N = gridW * gridH;
+    const ranks = new Array(N);
+    for (let i = 0; i < N; i++) ranks[i] = i / N;
+    let seed = 12345;
+    function rand() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+    for (let i = N - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [ranks[i], ranks[j]] = [ranks[j], ranks[i]];
+    }
+    return ranks;
+  }
+
+  // Get climate data for a grid point at a given month
+  function getClimateAt(lat, lng, month) {
+    // Synthetic fallback mode — use model functions
+    if (window._syntheticMode) {
+      if (!syntheticIsLand(lat, lng)) return null;
+      const tHi = syntheticTemp(lat, lng, month);
+      return { tHi, tLo: tHi - 15, rain: syntheticRain(lat, lng, month), snow: 0, sun: 8, wind: 10, cloud: 50 };
+    }
+    if (!climateGridData || !climateGridData.points) return null;
+    const step = climateGridData.gridStep || 2;
+    // Snap to nearest grid point
+    const snapLat = Math.round(lat / step) * step;
+    const snapLng = Math.round(lng / step) * step;
+    const key = `${snapLat},${snapLng}`;
+    const point = climateGridData.points[key];
+    if (!point) return null;
+    // Interpolate between months
+    const m1 = Math.floor(month);
+    const m2 = m1 >= 12 ? 1 : m1 + 1;
+    const frac = month - m1;
+    const d1 = point[m1] || point[String(m1)];
+    const d2 = point[m2] || point[String(m2)];
+    if (!d1) return null;
+    if (!d2 || frac === 0) return d1;
+    const lerp = (a, b, t) => a != null && b != null ? a + (b - a) * t : a;
+    return {
+      tHi: lerp(d1.tHi, d2.tHi, frac),
+      tLo: lerp(d1.tLo, d2.tLo, frac),
+      rain: lerp(d1.rain, d2.rain, frac),
+      snow: lerp(d1.snow, d2.snow, frac),
+      sun: lerp(d1.sun, d2.sun, frac),
+      wind: lerp(d1.wind, d2.wind, frac),
+      cloud: lerp(d1.cloud, d2.cloud, frac),
+    };
+  }
+
+  // Check if a pixel is land (using the grid data keys)
+  const landCache = new Map();
+  function isLandPixel(lat, lng) {
+    if (window._syntheticMode) return syntheticIsLand(lat, lng);
+    if (!climateGridData) return false;
+    const step = climateGridData.gridStep || 2;
+    const snapLat = Math.round(lat / step) * step;
+    const snapLng = Math.round(lng / step) * step;
+    const key = `${snapLat},${snapLng}`;
+    if (landCache.has(key)) return landCache.get(key);
+    const result = !!climateGridData.points[key];
+    landCache.set(key, result);
+    return result;
+  }
+
+  function pixelToLatLng(px, py) {
+    return { lat: 90 - (py / CH) * 180, lng: (px / CW) * 360 - 180 };
+  }
+
+  async function loadClimateData() {
+    // Try JSON files
+    const urls = ['climate-grid-synthetic.json', 'climate-grid.json'];
+    for (const url of urls) {
+      try {
+        const resp = await fetch(url);
+        if (resp.ok) {
+          climateGridData = await resp.json();
+          climateDataLoaded = true;
+          initClimateExplorer();
+          return;
+        }
+      } catch (e) {}
+    }
+    // No JSON available — use synthetic model as fallback
+    loadSyntheticFallback();
+  }
+
+  // Fallback synthetic model when no JSON is available
+  function syntheticTemp(lat, lng, month) {
+    const t = (month - 1) / 12, season = Math.cos((t - 0.54) * Math.PI * 2);
+    const absLat = Math.abs(lat); let temp = 85 - absLat * 1.3;
+    const swing = Math.min(absLat * 0.8, 40), hemi = lat > 0 ? 1 : -1;
+    temp += season * swing * hemi;
+    if ((lng > -110 && lng < -90 && lat > 30 && lat < 55) || (lng > 70 && lng < 120 && lat > 35 && lat < 60) || (lng > 20 && lng < 60 && lat > 40 && lat < 60)) temp += season * 15 * hemi;
+    if ((lng > 75 && lng < 95 && lat > 25 && lat < 40) || (lng > -80 && lng < -65 && lat > -30 && lat < 0) || (lng > -125 && lng < -105 && lat > 30 && lat < 55)) temp -= 15;
+    return temp;
+  }
+  function syntheticRain(lat, lng, month) {
+    const t = (month - 1) / 12, absLat = Math.abs(lat); let rain = 0;
+    const itcz = 8 * Math.sin((t - 0.1) * Math.PI * 2), dist = Math.abs(lat - itcz);
+    if (dist < 15) rain += 70 * (1 - dist / 15);
+    if (absLat > 18 && absLat < 32) rain *= 0.3;
+    if (absLat > 35 && absLat < 65) { const s = Math.cos((t - 0.54) * Math.PI * 2); rain += 30 - s * (lat > 0 ? 1 : -1) * 10; }
+    if (lng > 65 && lng < 110 && lat > 5 && lat < 30) { const s = Math.cos((t - 0.54) * Math.PI * 2); if (s > 0) rain += 40 * s; else rain *= 0.3; }
+    if (lng > -15 && lng < 60 && lat > 15 && lat < 32) rain = Math.min(rain, 10);
+    if (lng > 115 && lng < 145 && lat > -30 && lat < -20) rain = Math.min(rain, 15);
+    if (absLat > 70) rain = Math.min(rain, 15);
+    return Math.max(0, Math.min(100, rain));
+  }
+  function syntheticIsLand(lat, lng) {
+    if (lng >= -140 && lng <= -60 && lat >= 25 && lat <= 70) return true;
+    if (lng >= -170 && lng <= -140 && lat >= 55 && lat <= 72) return true;
+    if (lng >= -120 && lng <= -80 && lat >= 15 && lat <= 32) return true;
+    if (lng >= -90 && lng <= -60 && lat >= 8 && lat <= 20) return true;
+    if (lng >= -55 && lng <= -20 && lat >= 60 && lat <= 83) return true;
+    if (lng >= -82 && lng <= -34 && lat >= -56 && lat <= 12) { const r = (lat + 56) / 68; if (Math.abs(lng - (-70 + r * 30)) < 18 - Math.abs(r - 0.45) * 10) return true; }
+    if (lng >= -10 && lng <= 60 && lat >= 36 && lat <= 72) return true;
+    if (lng >= -25 && lng <= -5 && lat >= 36 && lat <= 44) return true;
+    if (lng >= -12 && lng <= 2 && lat >= 50 && lat <= 60) return true;
+    if (lng >= -18 && lng <= 52 && lat >= -35 && lat <= 37) { const r = (lat + 35) / 72; if (Math.abs(lng - (20 - (r - 0.5) * 8)) < 25 - Math.abs(r - 0.5) * 15) return true; }
+    if (lng >= 43 && lng <= 51 && lat >= -26 && lat <= -12) return true;
+    if (lng >= 60 && lng <= 150 && lat >= 10 && lat <= 70) return true;
+    if (lng >= 25 && lng <= 60 && lat >= 12 && lat <= 45) return true;
+    if (lng >= 92 && lng <= 106 && lat >= 8 && lat <= 22) return true;
+    if (lng >= 95 && lng <= 141 && lat >= -11 && lat <= 6) return true;
+    if (lng >= 118 && lng <= 127 && lat >= 5 && lat <= 19) return true;
+    if (lng >= 130 && lng <= 146 && lat >= 30 && lat <= 46) return true;
+    if (lng >= 112 && lng <= 154 && lat >= -40 && lat <= -10) return true;
+    if (lng >= 166 && lng <= 179 && lat >= -47 && lat <= -34) return true;
+    return false;
+  }
+
+  // Use synthetic model as fallback, override getClimateAt and isLandPixel
+  function loadSyntheticFallback() {
+    climateDataLoaded = true;
+    climateGridData = { gridStep: 2, synthetic: true };
+
+    // Override to use the model functions directly
+    window._syntheticMode = true;
+    initClimateExplorer();
+  }
+
+  function initClimateExplorer() {
+    if (climateInitialized) { updateClimate(0); return; }
+    climateInitialized = true;
+
+    // Set canvas sizes
+    const tc = document.getElementById('climateTempCanvas');
+    const rc = document.getElementById('climateRainCanvas');
+    tc.width = CW; tc.height = CH;
+    rc.width = CW; rc.height = CH;
+
+    // Build month ticks
+    const ticks = document.getElementById('climateMonthTicks');
+    const mNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    mNames.forEach((m, i) => {
+      const span = document.createElement('span');
+      span.textContent = m;
+      span.onclick = () => {
+        document.getElementById('climateSlider').value = i * 100;
+        updateClimate(i * 100);
+      };
+      ticks.appendChild(span);
+    });
+
+    // Build rain dot grid with blue noise thresholds
+    const DOT_GRID = 8;
+    const gridCols = Math.floor(CW / DOT_GRID);
+    const gridRows = Math.floor(CH / DOT_GRID);
+    const thresholds = buildBlueNoise(gridCols, gridRows);
+
+    window._climateDots = [];
+    for (let gy = 0; gy < gridRows; gy++) {
+      for (let gx = 0; gx < gridCols; gx++) {
+        window._climateDots.push({
+          x: gx * DOT_GRID + DOT_GRID / 2,
+          y: gy * DOT_GRID + DOT_GRID / 2,
+          threshold: thresholds[gy * gridCols + gx]
+        });
+      }
+    }
+
+    // Build rain legend
+    const legendEl = document.getElementById('climateRainLegend');
+    const lc = document.createElement('canvas');
+    lc.width = 200; lc.height = 14;
+    const lctx = lc.getContext('2d');
+    lctx.fillStyle = '#FAF7F2'; lctx.fillRect(0, 0, 200, 14);
+    lctx.fillStyle = 'rgba(61,53,41,0.65)';
+    const lCols = Math.floor(200 / 5), lRows = Math.floor(14 / 5);
+    const lt = buildBlueNoise(lCols, lRows);
+    for (let gy = 0; gy < lRows; gy++) {
+      for (let gx = 0; gx < lCols; gx++) {
+        const prob = (gx * 5 + 2.5) / 200;
+        if (prob <= lt[gy * lCols + gx]) continue;
+        lctx.beginPath(); lctx.arc(gx * 5 + 2.5, gy * 5 + 2.5, 1, 0, Math.PI * 2); lctx.fill();
+      }
+    }
+    legendEl.style.background = 'url(' + lc.toDataURL() + ')';
+    legendEl.style.backgroundSize = 'cover';
+
+    // Slider
+    document.getElementById('climateSlider').addEventListener('input', e => updateClimate(parseInt(e.target.value)));
+
+    // Tooltip
+    const mapStack = document.getElementById('climateMapStack');
+    const tooltip = document.getElementById('climateTooltip');
+    mapStack.addEventListener('mousemove', e => {
+      const rect = mapStack.getBoundingClientRect();
+      const px = ((e.clientX - rect.left) / rect.width) * CW;
+      const py = ((e.clientY - rect.top) / rect.height) * CH;
+      const { lat, lng } = pixelToLatLng(px, py);
+      if (!isLandPixel(lat, lng)) { tooltip.classList.remove('visible'); return; }
+      const sliderVal = parseInt(document.getElementById('climateSlider').value);
+      const monthFloat = 1 + (sliderVal / 100);
+      const displayMonth = monthFloat > 12 ? monthFloat - 12 : monthFloat;
+      const data = getClimateAt(lat, lng, displayMonth);
+      if (!data) { tooltip.classList.remove('visible'); return; }
+      tooltip.style.left = (e.clientX - rect.left) + 'px';
+      tooltip.style.top = (e.clientY - rect.top) + 'px';
+      const latStr = lat >= 0 ? Math.abs(Math.round(lat)) + '°N' : Math.abs(Math.round(lat)) + '°S';
+      const lngStr = lng >= 0 ? Math.abs(Math.round(lng)) + '°E' : Math.abs(Math.round(lng)) + '°W';
+      document.getElementById('climateTooltipLoc').textContent = `${latStr}, ${lngStr}`;
+      let stats = `${Math.round(data.tLo)}° – ${Math.round(data.tHi)}°F`;
+      stats += ` · ${Math.round(data.rain)}% rain`;
+      if (data.snow > 5) stats += ` · ${Math.round(data.snow)}% snow`;
+      if (data.sun != null) stats += `\n${Math.round(data.sun)}h sun · ${Math.round(data.wind)} mph wind`;
+      document.getElementById('climateTooltipStats').textContent = stats;
+      tooltip.classList.add('visible');
+    });
+    mapStack.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+
+    // Initial render
+    updateClimate(0);
+  }
+
+  function updateClimate(sliderVal) {
+    const monthFloat = 1 + (sliderVal / 100);
+    const displayMonth = monthFloat > 12 ? monthFloat - 12 : monthFloat;
+    const monthIdx = Math.floor(displayMonth) - 1;
+    const nextIdx = (monthIdx + 1) % 12;
+    const frac = displayMonth - Math.floor(displayMonth);
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const mShort = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    if (frac < 0.15 || frac > 0.85) {
+      document.getElementById('climateMonthLabel').textContent = monthNames[frac > 0.85 ? nextIdx : monthIdx];
+    } else {
+      document.getElementById('climateMonthLabel').textContent = mShort[monthIdx] + ' → ' + mShort[nextIdx];
+    }
+
+    drawClimateTemp(displayMonth);
+    drawClimateRain(displayMonth);
+  }
+
+  function drawClimateTemp(monthFloat) {
+    const canvas = document.getElementById('climateTempCanvas');
+    const ctx = canvas.getContext('2d');
+    const img = ctx.createImageData(CW, CH);
+    const data = img.data;
+
+    if (window._syntheticMode) {
+      for (let y = 0; y < CH; y++) {
+        for (let x = 0; x < CW; x++) {
+          const { lat, lng } = pixelToLatLng(x, y);
+          const i = (y * CW + x) * 4;
+          if (!syntheticIsLand(lat, lng)) {
+            data[i] = 237; data[i+1] = 230; data[i+2] = 216; data[i+3] = 255;
+          } else {
+            const temp = syntheticTemp(lat, lng, monthFloat);
+            const c = tempToColor(temp);
+            data[i] = c.r; data[i+1] = c.g; data[i+2] = c.b; data[i+3] = 255;
+          }
+        }
+      }
+    } else {
+      const step = climateGridData.gridStep || 2;
+      for (let y = 0; y < CH; y++) {
+        for (let x = 0; x < CW; x++) {
+          const { lat, lng } = pixelToLatLng(x, y);
+          const i = (y * CW + x) * 4;
+          const climate = getClimateAt(lat, lng, monthFloat);
+          if (!climate) {
+            data[i] = 237; data[i+1] = 230; data[i+2] = 216; data[i+3] = 255;
+          } else {
+            const c = tempToColor(climate.tHi);
+            data[i] = c.r; data[i+1] = c.g; data[i+2] = c.b; data[i+3] = 255;
+          }
+        }
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+
+  function drawClimateRain(monthFloat) {
+    const canvas = document.getElementById('climateRainCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, CW, CH);
+    ctx.fillStyle = 'rgba(61, 53, 41, 0.65)';
+
+    if (window._syntheticMode) {
+      for (const dot of window._climateDots) {
+        const { lat, lng } = pixelToLatLng(dot.x, dot.y);
+        if (!syntheticIsLand(lat, lng)) continue;
+        const rain = syntheticRain(lat, lng, monthFloat);
+        const rainFrac = rain / 100;
+        if (rainFrac <= dot.threshold) continue;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else {
+      for (const dot of window._climateDots) {
+        const { lat, lng } = pixelToLatLng(dot.x, dot.y);
+        const climate = getClimateAt(lat, lng, monthFloat);
+        if (!climate) continue;
+        const rainFrac = climate.rain / 100;
+        if (rainFrac <= dot.threshold) continue;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
   }
 
   // ═══════════════════════════════════════
