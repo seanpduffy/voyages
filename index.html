@@ -991,24 +991,39 @@
     font-size: 11px;
     color: var(--text-secondary);
     line-height: 1.5;
-    cursor: pointer;
+    cursor: default;
     transition: background 0.15s;
   }
 
-  .panel-plain .panel-preview {
-    margin-left: 15px;
+  /* Interactive only when the content is actually truncated or currently expanded */
+  .panel-preview.is-clamped,
+  .panel-preview.expanded {
+    cursor: pointer;
   }
 
-  .panel-preview:hover {
+  .panel-preview.is-clamped:hover,
+  .panel-preview.expanded:hover {
     background: var(--bg-warm);
+  }
+
+  /* Links inside previews — subtle, on-brand */
+  .panel-preview a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: rgba(180, 140, 80, 0.3);
+    text-underline-offset: 2px;
+  }
+  .panel-preview a:hover {
+    text-decoration-color: var(--accent);
   }
 
   .panel-preview-text {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
     white-space: pre-wrap;
+    word-break: break-word;
   }
 
   .panel-preview.expanded .panel-preview-text {
@@ -1022,6 +1037,11 @@
     letter-spacing: 0.3px;
     text-transform: uppercase;
     margin-top: 4px;
+    display: none;
+  }
+
+  /* Only show the toggle when content is actually truncated and not yet expanded */
+  .panel-preview.is-clamped:not(.expanded) .panel-preview-toggle {
     display: inline-block;
   }
 
@@ -2381,18 +2401,113 @@
     `;
   }
 
+  // Sanitize HTML description content into a safe, minimal subset we're happy to render.
+  // Many descriptions come from reservation emails (OpenTable, SevenRooms, airlines) as
+  // full HTML with tables and inline styling. We keep: <a> (external links), <b>/<strong>,
+  // <i>/<em>, <br>, <p>. Tables and everything else get stripped of their tags but their
+  // text content is preserved, with block-level elements inserting a line break.
+  function sanitizeDescHtml(html) {
+    if (!html) return '';
+
+    // If it doesn't look like HTML, escape plain text and preserve line breaks
+    if (!/<[a-z/]/i.test(html)) {
+      return escapeHtml(html).replace(/\n/g, '<br>');
+    }
+
+    const KEEP = new Set(['A', 'B', 'STRONG', 'I', 'EM', 'BR', 'P']);
+    const BREAK_AFTER = new Set(['P', 'DIV', 'TR', 'LI', 'TABLE', 'TBODY', 'THEAD']);
+    const NEVER_RENDER = new Set(['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'EMBED']);
+
+    // Parse in an isolated document — DOMParser does NOT execute scripts
+    const parser = new DOMParser();
+    const doc = parser.parseFromString('<div id="root">' + html + '</div>', 'text/html');
+    const root = doc.getElementById('root');
+    if (!root) return escapeHtml(html);
+
+    function walk(node) {
+      // Text node: escape
+      if (node.nodeType === 3) return escapeHtml(node.textContent);
+      // Element node
+      if (node.nodeType === 1) {
+        const tag = node.tagName;
+        if (NEVER_RENDER.has(tag)) return '';
+
+        const inner = Array.from(node.childNodes).map(walk).join('');
+
+        if (KEEP.has(tag)) {
+          if (tag === 'BR') return '<br>';
+          if (tag === 'A') {
+            const href = node.getAttribute('href') || '';
+            // Only allow http/https links
+            if (/^https?:\/\//i.test(href)) {
+              const safeHref = href.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+              return `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${inner}</a>`;
+            }
+            return inner; // drop unsafe or mailto-style links but keep visible text
+          }
+          const name = tag.toLowerCase();
+          return `<${name}>${inner}</${name}>`;
+        }
+
+        // Tag is stripped but content is kept; add a line break after block-level elements
+        if (BREAK_AFTER.has(tag)) return inner + '<br>';
+        return inner;
+      }
+      return '';
+    }
+
+    let out = walk(root);
+    // Normalize whitespace that email HTML often has in abundance
+    out = out.replace(/[ \t]+/g, ' ');
+    // Collapse long runs of line breaks to at most two
+    out = out.replace(/(<br>\s*){3,}/g, '<br><br>');
+    // Trim leading/trailing breaks and space
+    out = out.replace(/^(\s|<br>)+/, '').replace(/(\s|<br>)+$/, '');
+    return out;
+  }
+
   // Render expandable description preview
   function renderDescPreview(description) {
     if (!description || description.trim().length === 0) return '';
     const clean = description.trim();
     // Only show if there's meaningful content
     if (clean.length < 10) return '';
+    const safe = sanitizeDescHtml(clean);
+    if (!safe) return '';
     return `
-      <div class="panel-preview" onclick="this.classList.toggle('expanded')">
-        <div class="panel-preview-text">${escapeHtml(clean)}</div>
+      <div class="panel-preview" onclick="togglePreview(this)">
+        <div class="panel-preview-text">${safe}</div>
         <span class="panel-preview-toggle">Tap to expand</span>
       </div>
     `;
+  }
+
+  // Click handler: only toggle when content is actually truncated (or currently expanded).
+  // Non-clamped previews are effectively inert to avoid confusing tap affordance.
+  function togglePreview(el) {
+    if (el.classList.contains('is-clamped') || el.classList.contains('expanded')) {
+      el.classList.toggle('expanded');
+    }
+    // Prevent text selection on rapid taps
+    if (window.getSelection) {
+      const sel = window.getSelection();
+      if (sel.type === 'Range') sel.removeAllRanges();
+    }
+  }
+
+  // After render, mark which previews are actually overflowing their clamp so that
+  // the "Tap to expand" affordance only appears where it does something.
+  function markClampedPreviews() {
+    document.querySelectorAll('.panel-preview').forEach(preview => {
+      const text = preview.querySelector('.panel-preview-text');
+      if (!text) return;
+      // Compare full content height vs visible height (with 1px tolerance for rounding)
+      if (text.scrollHeight > text.clientHeight + 1) {
+        preview.classList.add('is-clamped');
+      } else {
+        preview.classList.remove('is-clamped');
+      }
+    });
   }
 
   function renderPanelContent(trip, events) {
@@ -2505,6 +2620,9 @@
     });
 
     inner.innerHTML = html;
+    // After the DOM updates, measure which previews are actually truncated
+    // so the "Tap to expand" affordance only appears where it's meaningful.
+    requestAnimationFrame(markClampedPreviews);
   }
 
   function toggleBooking(evId) {
