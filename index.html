@@ -1813,23 +1813,36 @@
     const timeMin = new Date(currentYear - 1, 0, 1).toISOString();
     const timeMax = new Date(currentYear + 2, 0, 1).toISOString();
 
-    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(selectedCalId)}/events`
+    const baseUrl = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(selectedCalId)}/events`
       + `?timeMin=${timeMin}`
       + `&timeMax=${timeMax}`
       + `&singleEvents=true`
       + `&orderBy=startTime`
-      + `&maxResults=200`;
+      + `&maxResults=2500`;
 
     try {
-      const resp = await fetch(url, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({}));
-        throw new Error(err.error?.message || `HTTP ${resp.status}`);
-      }
-      const data = await resp.json();
-      return (data.items || [])
+      // Paginate until all events are fetched
+      const allItems = [];
+      let pageToken = null;
+      let pageCount = 0;
+      const MAX_PAGES = 20; // safety cap
+
+      do {
+        const url = baseUrl + (pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : '');
+        const resp = await fetch(url, {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          throw new Error(err.error?.message || `HTTP ${resp.status}`);
+        }
+        const data = await resp.json();
+        if (data.items) allItems.push(...data.items);
+        pageToken = data.nextPageToken || null;
+        pageCount++;
+      } while (pageToken && pageCount < MAX_PAGES);
+
+      return allItems
         .filter(e => e.start && e.start.date) // Only all-day events, skip timed events
         .map(e => {
           const startDate = e.start.date;
