@@ -1843,7 +1843,11 @@
       } while (pageToken && pageCount < MAX_PAGES);
 
       return allItems
-        .filter(e => e.start && e.start.date) // Only all-day events, skip timed events
+        .filter(e => e.start && e.start.date) // all-day events only (skip timed events)
+        // Trip markers carry no description. Booking events written by the label-to-calendar
+        // script always include one (room, rate, confirmation, source). So an empty description
+        // means a real trip, not a piece of booking detail — keep only those.
+        .filter(e => !e.description || !e.description.trim())
         .map(e => {
           const startDate = e.start.date;
           // Google all-day end dates are exclusive — subtract 1 day
